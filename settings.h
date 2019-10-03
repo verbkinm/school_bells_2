@@ -1,0 +1,42 @@
+#ifndef SETTINGS_H
+#define SETTINGS_H
+
+#include <QSettings>
+#include "Day/day.h"
+#include "Shedule/shedule.h"
+#include "General/general.h"
+#include "General/network.h"
+
+class Settings
+{
+public:
+    Settings();
+
+    const General &general_settings() const;
+
+private:
+    void read_settings();
+    void read_settings_general();
+    void read_settings_network();
+    void read_settings_days();
+    void read_settings_shedule();
+    void read_settings_shedule_shift(Shedule &shedule);
+    void read_settings_shedule_lesson(Shift &shift, int shift_number);
+
+    void write_settings();
+    void write_settings_general();
+    void write_settings_network();
+    void write_settings_days();
+    void write_settings_shedule();
+    void write_settings_shedule_shift(size_t shedule_number);
+    void write_settings_shedule_lesson(size_t shedule_number, size_t shift_number);
+
+    Day _days[7];
+    General _general;
+    std::vector<Shedule> _shedules;
+    Network _network;
+
+    QSettings _settings;
+};
+
+#endif // SETTINGS_H
