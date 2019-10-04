@@ -20,8 +20,13 @@ public:
 
     friend Time operator+(const Time &lhs, const Time &rhs);
     friend Time operator-(const Time &lhs, const Time &rhs);
+    friend bool operator<(const Time &lhs, const Time &rhs);
+    friend bool operator>(const Time &lhs, const Time &rhs);
+    friend bool operator==(const Time &lhs, const Time &rhs);
 
 private:
+    int total_minutes() const;
+
     char _hours;
     char _minutes;
 };

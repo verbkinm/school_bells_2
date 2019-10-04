@@ -9,9 +9,10 @@ int main()
     Time t1(8,0);
     Time t2(8,30);
 
-   Time t3 = t2 - t1;
+//   Time t3 = t2 - t1;
 
-   std::cout << t3.hours() << ":" << t3.minutes() << std::endl;
+//   std::cout << t3.hours() << ":" << t3.minutes() << std::endl;
+    std::cout << (t2 == t2) << std::endl;
 
 //    const General g = settings.general_settings();
 
