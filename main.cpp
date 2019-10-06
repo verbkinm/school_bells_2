@@ -1,33 +1,71 @@
 #include <iostream>
-#include <settings.h>
-#include "General/general.h"
-#include <sstream>
+#include <Settings/settings.h>
+#include "Current_Shedule/current_shedule.h"
+#include "Media_Player/media_player.h"
 
-int main()
+#include <QCoreApplication>
+
+int main(int argc, char *argv[])
 {
+    QCoreApplication a(argc, argv);
+    std::setlocale(LC_ALL,"ru_RU.UTF-8");
+//    std::setlocale(LC_ALL,"ru_RU.UTF-8");
+    std::string s = "Привет";
+    std::cout << s << std::endl;
+
+    std::wstring ws = L"Привет";
+    std::wcout << ws << std::endl;
+
+
+
+
+//    Media_Player media_player;
+
+//    media_player.play("C:\\Qt\\myProg\\bells\\sounds\\Повседневный.mp3");
 //    Settings settings;
-    Time t1(8,0);
-    Time t2(8,30);
+//    Current_Shedule current_shedule;
 
-//   Time t3 = t2 - t1;
+//    const General  *general = settings.general();
+//    const std::array<Day, 7> *days = settings.days();
+//    const std::vector<Shedule> *shedules = settings.shedules();
 
-//   std::cout << t3.hours() << ":" << t3.minutes() << std::endl;
-    std::cout << (t2 == t2) << std::endl;
+//    size_t current_day_of_week = Day::current_day_of_week();
+//    if(!days->at(current_day_of_week).isEnable())
+//        return 1;
 
-//    const General g = settings.general_settings();
+//    Shedule shedule = shedules->at(days->at(current_day_of_week).getNumber_shedule_of_day());
 
-//    Time t1;
-//    t1.setFrom_string("21:1523");
-//    Time t2(25,59);
+//    for(const auto &shift : shedule._shifts)
+//    {
+//        if(!shift.isEnable())
+//            continue;
+//        for (const auto &lesson : shift._lessons)
+//        {
+//            if(!lesson.isEnable())
+//                continue;
+//            if(general->getCall_before_lesson())
+//                current_shedule.add(lesson.getTime_begin() - Time(0, general->getNumber_of_minutes_to_call_before_lesson()), general->getManual_call());
+//            current_shedule.add(lesson.getTime_begin(), lesson.getSound_begin());
+//            current_shedule.add(lesson.getTime_end(), lesson.getSound_end());
+//        }
+//    }
 
-//    Time t3 = t1 + t2;
-//    std::cout << "H: " << t1.hours() << std::endl;
-//    std::cou/t << "M: " << t1.minutes() << std::endl << std::endl;
 
-//    Time tt1(5,54);
-//    Time tt2(3,52);
-//    Time tt3 = tt1 - tt2;
-//    std::cout << "H: " << tt3.hours() << std::endl;
-//    std::cout << "M: " << tt3.minutes() << std::endl;
-    return 1;
+//    try
+//    {
+//        Media_Player media_player;
+//        media_player.play(current_shedule.getNext_call().sound());
+//        std::cout << current_shedule.getNext_call().time().toString() << " " << current_shedule.getNext_call().sound().c_str() << std::endl;
+//        std::cout << current_shedule.getLast_call().time().toString() << std::endl;
+//    }
+//    catch(std::out_of_range &)
+//    {
+//        std::cout << "shedule is empty" << std::endl;
+//    }
+
+
+
+    return a.exec();
+//    return 1;
 }
+

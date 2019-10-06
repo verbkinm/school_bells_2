@@ -12,7 +12,12 @@ class Settings
 public:
     Settings();
 
-    const General &general_settings() const;
+    const General *general() const;
+    void setGeneral(const General &general);
+
+    const std::array<Day, 7> *days() const;
+    const std::vector<Shedule> *shedules() const;
+
 
 private:
     void read_settings();
@@ -31,7 +36,7 @@ private:
     void write_settings_shedule_shift(size_t shedule_number);
     void write_settings_shedule_lesson(size_t shedule_number, size_t shift_number);
 
-    Day _days[7];
+    std::array<Day, 7> _days;
     General _general;
     std::vector<Shedule> _shedules;
     Network _network;

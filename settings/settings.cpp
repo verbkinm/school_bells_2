@@ -1,18 +1,11 @@
 #include "settings.h"
 
-#include <QDebug>
-
 Settings::Settings() : _settings(QSettings::IniFormat, QSettings::UserScope, "LYCEUM", "bells2")
 {
     _settings.setIniCodec("utf8");
 
     read_settings();
     write_settings();
-}
-
-const General &Settings::general_settings() const
-{
-    return _general;
 }
 
 void Settings::read_settings()
@@ -27,6 +20,9 @@ void Settings::read_settings_general()
 {
     _general.setManual_call(_settings.value("manual_call", "нет").toString().toUtf8().data());
     _general.setSound_dir_path(_settings.value("sound_dir_path", "").toString().toUtf8().data());
+    _general.setCall_before_lesson(_settings.value("call_before_lesson", false).toBool());
+    _general.setSound_before_lesson(_settings.value("sound_before_lesson", "нет").toString().toUtf8().data());
+    _general.setNumber_of_minutes_to_call_before_lesson(_settings.value("number_of_minutes_to_call_before_lesson", 0).toInt());
 }
 
 void Settings::read_settings_network()
@@ -40,14 +36,11 @@ void Settings::read_settings_network()
 
 void Settings::read_settings_days()
 {
-    for(int i = 0; i < 7; ++i)
+    for(size_t i = 0; i < 7; ++i)
     {
         _settings.beginGroup("Days" + QString::number(i));
         _days[i].setEnable(_settings.value("enable", false).toBool());
-        _days[i].setCall_before_lesson(_settings.value("call_before_lesson", false).toBool());
-        _days[i].setSound_before_lesson(_settings.value("sound_before_lesson", "нет").toString().toUtf8().data());
-        _days[i].setNumber_shedule_of_day(_settings.value("number_shedule_of_day", 0).toInt());
-        _days[i].setNumber_of_minutes_to_call_before_lesson(_settings.value("number_of_minutes_to_call_before_lesson", 0).toInt());
+        _days[i].setNumber_shedule_of_day(_settings.value("number_shedule_of_day", 0).toULongLong());
         _settings.endGroup();
     }
 }
@@ -84,7 +77,7 @@ void Settings::read_settings_shedule_shift(Shedule &shedule)
 
         read_settings_shedule_lesson(shift, shift_number);
 
-        shedule.shifts.push_back(shift);
+        shedule._shifts.push_back(shift);
     }
 }
 
@@ -124,27 +117,27 @@ void Settings::write_settings_general()
 {
     _settings.setValue("manual_call", QString::fromUtf8(_general.getManual_call().c_str()));
     _settings.setValue("sound_dir_path", QString::fromUtf8(_general.getSound_dir_path().c_str()));
+    _settings.setValue("call_before_lesson", _general.getCall_before_lesson());
+    _settings.setValue("sound_before_lesson", QString::fromUtf8(_general.getSound_before_lesson().c_str()));
+    _settings.setValue("number_of_minutes_to_call_before_lesson", _general.getNumber_of_minutes_to_call_before_lesson());
 }
 
 void Settings::write_settings_network()
 {
     _settings.beginGroup("TCP_Server");
     _settings.setValue("addr", QString::fromUtf8(_network.getAddr().c_str()));
-    _settings.setValue("port", _network.getPort());;
+    _settings.setValue("port", _network.getPort());
     _settings.setValue("run_at_program_start", _network.isRun_at_program_start());
     _settings.endGroup();
 }
 
 void Settings::write_settings_days()
 {
-    for(int i = 0; i < 7; ++i)
+    for(size_t i = 0; i < 7; ++i)
     {
         _settings.beginGroup("Days"+QString::number(i));
         _settings.setValue("enable", _days[i].isEnable());
-        _settings.setValue("call_before_lesson", _days[i].getCall_before_lesson());
-        _settings.setValue("sound_before_lesson", QString::fromUtf8(_days[i].getSound_before_lesson().c_str()));
         _settings.setValue("number_shedule_of_day", _days[i].getNumber_shedule_of_day());
-        _settings.setValue("number_of_minutes_to_call_before_lesson", _days[i].getNumber_of_minutes_to_call_before_lesson());
         _settings.endGroup();
     }
 }
@@ -162,19 +155,39 @@ void Settings::write_settings_shedule()
 void Settings::write_settings_shedule_shift(size_t shedule_number)
 {
     _settings.setValue("name", QString::fromUtf8(_shedules.at(shedule_number).name().c_str()));
-    for(size_t shift_number = 0; shift_number < _shedules.at(shedule_number).shifts.size(); ++shift_number)
+    for(size_t shift_number = 0; shift_number < _shedules.at(shedule_number)._shifts.size(); ++shift_number)
         write_settings_shedule_lesson(shedule_number, shift_number);
 }
 
 void Settings::write_settings_shedule_lesson(size_t shedule_number, size_t shift_number)
 {
-    _settings.setValue("shift" + QString::number(shift_number) + "_enable", _shedules.at(shedule_number).shifts.at(shift_number).isEnable());
-    for(size_t lesson_number = 0; lesson_number < _shedules.at(shift_number).shifts.at(shift_number).getNumber_of_lessons(); ++lesson_number)
+    _settings.setValue("shift" + QString::number(shift_number) + "_enable", _shedules.at(shedule_number)._shifts.at(shift_number).isEnable());
+    for(size_t lesson_number = 0; lesson_number < _shedules.at(shift_number)._shifts.at(shift_number).getNumber_of_lessons(); ++lesson_number)
     {
-        _settings.setValue("shift" + QString::number(shift_number) + "_lesson" + QString::number(lesson_number) + "_enable", _shedules.at(shedule_number).shifts.at(shift_number)._lessons.at(lesson_number).isEnable());
-        _settings.setValue("shift" + QString::number(shift_number) + "_lesson" + QString::number(lesson_number) + "_sound_begin", QString::fromUtf8(_shedules.at(shedule_number).shifts.at(shift_number)._lessons.at(lesson_number).getSound_begin().c_str()));
-        _settings.setValue("shift" + QString::number(shift_number) + "_lesson" + QString::number(lesson_number) + "_sound_end", QString::fromUtf8(_shedules.at(shedule_number).shifts.at(shift_number)._lessons.at(lesson_number).getSound_end().c_str()));
-        _settings.setValue("shift" + QString::number(shift_number) + "_lesson" + QString::number(lesson_number) + "_time_begin", QString::fromUtf8(_shedules.at(shedule_number).shifts.at(shift_number)._lessons.at(lesson_number).getTime_begin().c_str()));
-        _settings.setValue("shift" + QString::number(shift_number) + "_lesson" + QString::number(lesson_number) + "_time_end", QString::fromUtf8(_shedules.at(shedule_number).shifts.at(shift_number)._lessons.at(lesson_number).getTime_end().c_str()));
+        _settings.setValue("shift" + QString::number(shift_number) + "_lesson" + QString::number(lesson_number) + "_enable", _shedules.at(shedule_number)._shifts.at(shift_number)._lessons.at(lesson_number).isEnable());
+        _settings.setValue("shift" + QString::number(shift_number) + "_lesson" + QString::number(lesson_number) + "_sound_begin", QString::fromUtf8(_shedules.at(shedule_number)._shifts.at(shift_number)._lessons.at(lesson_number).getSound_begin().c_str()));
+        _settings.setValue("shift" + QString::number(shift_number) + "_lesson" + QString::number(lesson_number) + "_sound_end", QString::fromUtf8(_shedules.at(shedule_number)._shifts.at(shift_number)._lessons.at(lesson_number).getSound_end().c_str()));
+        _settings.setValue("shift" + QString::number(shift_number) + "_lesson" + QString::number(lesson_number) + "_time_begin", QString::fromUtf8(_shedules.at(shedule_number)._shifts.at(shift_number)._lessons.at(lesson_number).getTime_begin().c_str()));
+        _settings.setValue("shift" + QString::number(shift_number) + "_lesson" + QString::number(lesson_number) + "_time_end", QString::fromUtf8(_shedules.at(shedule_number)._shifts.at(shift_number)._lessons.at(lesson_number).getTime_end().c_str()));
     }
+}
+
+const General *Settings::general() const
+{
+    return &_general;
+}
+
+void Settings::setGeneral(const General &general)
+{
+    _general = general;
+}
+
+const std::array<Day, 7> *Settings::days() const
+{
+    return &_days;
+}
+
+const std::vector<Shedule> *Settings::shedules() const
+{
+    return &_shedules;
 }

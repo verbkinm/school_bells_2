@@ -1,27 +1,34 @@
+TARGET = school_bells_2
 TEMPLATE = app
-CONFIG += console c++11
+QT += core multimedia
+CONFIG += console c++17
 CONFIG -= app_bundle
-CONFIG += qt
 
 SOURCES += \
-        day\day.cpp \
-        general\network.cpp \
-        general\general.cpp \
-        settings.cpp \
-        shedule\time\time.cpp \
-        shedule\lesson\lesson.cpp \
+        Current_Shedule\call.cpp \
+        Current_Shedule\current_shedule.cpp \
+        Settings/Day/day.cpp \
+        Settings/General/general.cpp \
+        Settings/General/network.cpp \
+        Settings/Shedule/lesson/lesson.cpp \
+        Settings/Shedule/shedule.cpp \
+        Settings/Shedule/shift/shift.cpp \
+        Settings/Shedule/time/time.cpp \
+        Settings/settings.cpp \
         main.cpp \
-        shedule\shedule.cpp \
-        shedule\shift\shift.cpp
+        Media_Player/media_player.cpp
 
 HEADERS += \
-    day\day.h \
-    general\network.h \
-    general\general.h \
-    settings.h \
-    shedule\time\time.h \
-    shedule\lesson\lesson.h \
-    shedule\shedule.h \
-    shedule\shift\shift.h
+    Current_Shedule\call.h \
+    Current_Shedule\current_shedule.h \
+    Settings/Day/day.h \
+    Settings/General/general.h \
+    Settings/General/network.h \
+    Settings/Shedule/lesson/lesson.h \
+    Settings/Shedule/shedule.h \
+    Settings/Shedule/shift/shift.h \
+    Settings/Shedule/time/time.h \
+    Media_Player/media_player.h \
+    Settings/settings.h \
 
 DISTFILES +=

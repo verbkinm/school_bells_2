@@ -9,7 +9,7 @@ class Shedule
 public:
     Shedule();
 
-    std::vector<Shift> shifts;
+    std::vector<Shift> _shifts;
 
     std::string name() const;
     void setName(const std::string &name);

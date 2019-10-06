@@ -6,6 +6,8 @@
 class Time
 {
 public:
+    static Time fromLocal_time();
+
     Time();
     Time(int h, int m);
 
@@ -16,13 +18,15 @@ public:
     void setMinutes(int m);
 
     void setFrom_string(std::string str);
-    std::string getString() const;
+    std::string toString() const;
 
     friend Time operator+(const Time &lhs, const Time &rhs);
     friend Time operator-(const Time &lhs, const Time &rhs);
     friend bool operator<(const Time &lhs, const Time &rhs);
     friend bool operator>(const Time &lhs, const Time &rhs);
     friend bool operator==(const Time &lhs, const Time &rhs);
+    friend bool operator<=(const Time &lhs, const Time &rhs);
+    friend bool operator>=(const Time &lhs, const Time &rhs);
 
 private:
     int total_minutes() const;

@@ -1,8 +1,15 @@
-#include <cmath>
-#include <algorithm>
-#include <iostream>
 #include <sstream>
+#include <ctime>
 #include "time.h"
+
+Time Time::fromLocal_time()
+{
+    time_t rawtime;
+    tm * timeinfo;
+    time(&rawtime);
+    timeinfo=localtime(&rawtime);
+    return {timeinfo->tm_hour, timeinfo->tm_min};
+}
 
 Time::Time() : _hours(0), _minutes(0)
 {
@@ -61,11 +68,21 @@ void Time::setFrom_string(std::string str)
     this->setMinutes(t.minutes());
 }
 
-std::string Time::getString() const
+std::string Time::toString() const
 {
     std::stringstream ss;
     ss << hours() << ":" << minutes();
     return ss.str();
+}
+
+bool operator>=(const Time &lhs, const Time &rhs)
+{
+    return lhs.total_minutes() >= rhs.total_minutes();
+}
+
+bool operator<=(const Time &lhs, const Time &rhs)
+{
+    return lhs.total_minutes() <= rhs.total_minutes();
 }
 
 bool operator==(const Time &lhs, const Time &rhs)
@@ -80,11 +97,11 @@ int Time::total_minutes() const
 
 bool operator<(const Time &lhs, const Time &rhs)
 {
-    return lhs.total_minutes() < rhs.total_minutes();;
+    return lhs.total_minutes() < rhs.total_minutes();
 }
 bool operator>(const Time &lhs, const Time &rhs)
 {
-    return lhs.total_minutes() > rhs.total_minutes();;
+    return lhs.total_minutes() > rhs.total_minutes();
 }
 
 Time operator-(const Time &lhs, const Time &rhs)
