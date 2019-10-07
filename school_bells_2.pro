@@ -15,6 +15,7 @@ SOURCES += \
         Settings/Shedule/shift/shift.cpp \
         Settings/Shedule/time/time.cpp \
         Settings/settings.cpp \
+        Log/log.cpp \
         main.cpp \
         Media_Player/media_player.cpp
 
@@ -30,5 +31,6 @@ HEADERS += \
     Settings/Shedule/time/time.h \
     Media_Player/media_player.h \
     Settings/settings.h \
+    Log/log.h
 
 DISTFILES +=
