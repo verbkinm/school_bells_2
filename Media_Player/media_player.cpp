@@ -28,7 +28,7 @@ void Media_Player::slotState_Changed(QMediaPlayer::State state)
     case (QMediaPlayer::PausedState): str_state = "QMediaPlayer::PausedState. The media player has paused playback, playback of the current track will resume from the position the player was paused at.";
         break;
     }
-    Log::write("stdout.log", "Media file: \"" + _sound + "\". " + str_state);
+    Log::write("Media file: \"" + _sound + "\". " + str_state);
 }
 
 void Media_Player::slotError(QMediaPlayer::Error error)
@@ -49,5 +49,5 @@ void Media_Player::slotError(QMediaPlayer::Error error)
     default:
         break;
     }
-    Log::write("stdout.log", "Error. Media file: \"" + _sound + "\". " + str_error);
+    Log::write("Error. Media file: \"" + _sound + "\". " + str_error);
 }

@@ -6,7 +6,7 @@
 class Log
 {
 public: 
-    static void write(const std::string &file_name, const std::string &data);
+    static void write(const std::string &data);
 };
 
 #endif // LOG_H

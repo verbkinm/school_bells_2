@@ -4,13 +4,15 @@
 
 #include "log.h"
 
-void Log::write(const std::string &file_name, const std::string &data)
+#define FILE_NAME "school_bell_2.log"
+
+void Log::write(const std::string &data)
 {
     std::ofstream file;
-    file.open(file_name, std::ios::app);
+    file.open(FILE_NAME, std::ios::app);
     if(!file)
     {
-        std::cerr << "Couldn't open file \"" << file_name << "\"" << std::endl;
+        std::cerr << "Couldn't open file \"" << FILE_NAME << "\"" << std::endl;
         return;
     }
 

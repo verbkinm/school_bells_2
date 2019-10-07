@@ -18,17 +18,17 @@ void Settings::read_settings()
 
 void Settings::read_settings_general()
 {
-    _general.setManual_call(_settings.value("manual_call", "нет").toString().toUtf8().data());
-    _general.setSound_dir_path(_settings.value("sound_dir_path", "").toString().toUtf8().data());
+    _general.setManual_call(_settings.value("manual_call", "нет").toString().toStdString());
+    _general.setSound_dir_path(_settings.value("sound_dir_path", "").toString().toStdString());
     _general.setCall_before_lesson(_settings.value("call_before_lesson", false).toBool());
-    _general.setSound_before_lesson(_settings.value("sound_before_lesson", "нет").toString().toUtf8().data());
+    _general.setSound_before_lesson(_settings.value("sound_before_lesson", "нет").toString().toStdString());
     _general.setNumber_of_minutes_to_call_before_lesson(_settings.value("number_of_minutes_to_call_before_lesson", 0).toInt());
 }
 
 void Settings::read_settings_network()
 {
     _settings.beginGroup("TCP_Server");
-    _network.setAddr(_settings.value("addr", "localhost").toString().toUtf8().data());
+    _network.setAddr(_settings.value("addr", "localhost").toString().toStdString());
     _network.setPort(_settings.value("port", 80).toInt());
     _network.setRun_at_program_start(_settings.value("run_at_program_start", false).toBool());
     _settings.endGroup();
@@ -55,7 +55,7 @@ void Settings::read_settings_shedule()
     {
         _settings.beginGroup("Shedule" + QString::number(shedule_number));
         Shedule shedule;
-        shedule.setName(_settings.value("name", _settings.group()).toString().toUtf8().data());
+        shedule.setName(_settings.value("name", _settings.group()).toString().toStdString());
 
         read_settings_shedule_shift(shedule);
 
@@ -91,13 +91,13 @@ void Settings::read_settings_shedule_lesson(Shift &shift, int shift_number)
     {
         Lesson lesson;
         lesson.setEnable(_settings.value("shift" + QString::number(shift_number) + "_lesson" + QString::number(lesson_number) + "_enable", false).toBool());
-        lesson.setSound_begin(_settings.value("shift" + QString::number(shift_number) + "_lesson" + QString::number(lesson_number) + "_sound_begin", "нет").toString().toUtf8().data());
-        lesson.setSound_end(_settings.value("shift" + QString::number(shift_number) + "_lesson" + QString::number(lesson_number) + "_sound_end", "нет").toString().toUtf8().data());
+        lesson.setSound_begin(_settings.value("shift" + QString::number(shift_number) + "_lesson" + QString::number(lesson_number) + "_sound_begin", "нет").toString().toStdString());
+        lesson.setSound_end(_settings.value("shift" + QString::number(shift_number) + "_lesson" + QString::number(lesson_number) + "_sound_end", "нет").toString().toStdString());
 
         Time time(0,0);
-        time.setFrom_string(_settings.value("shift" + QString::number(shift_number) + "_lesson" + QString::number(lesson_number) + "_time_begin", "00:00").toString().toUtf8().data());
+        time.setFrom_string(_settings.value("shift" + QString::number(shift_number) + "_lesson" + QString::number(lesson_number) + "_time_begin", "00:00").toString().toStdString());
         lesson.setTime_begin(time);
-        time.setFrom_string(_settings.value("shift" + QString::number(shift_number) + "_lesson" + QString::number(lesson_number) + "_time_end", "00:00").toString().toUtf8().data());
+        time.setFrom_string(_settings.value("shift" + QString::number(shift_number) + "_lesson" + QString::number(lesson_number) + "_time_end", "00:00").toString().toStdString());
         lesson.setTime_end(time);
 
         shift._lessons.push_back(lesson);

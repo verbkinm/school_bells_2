@@ -5,6 +5,7 @@ CONFIG += console c++17
 CONFIG -= app_bundle
 
 SOURCES += \
+        Program_exec/program_exec.cpp \
         Current_Shedule\call.cpp \
         Current_Shedule\current_shedule.cpp \
         Settings/Day/day.cpp \
@@ -20,6 +21,7 @@ SOURCES += \
         Media_Player/media_player.cpp
 
 HEADERS += \
+    Program_exec/program_exec.h \
     Current_Shedule\call.h \
     Current_Shedule\current_shedule.h \
     Settings/Day/day.h \

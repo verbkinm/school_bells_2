@@ -2,27 +2,25 @@
 #include <Settings/settings.h>
 #include "Current_Shedule/current_shedule.h"
 #include "Media_Player/media_player.h"
+#include "Log/log.h"
+#include "Program_exec/program_exec.h"
 
 #include <QCoreApplication>
 
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
-    std::setlocale(LC_ALL,"ru_RU.UTF-8");
-//    std::setlocale(LC_ALL,"ru_RU.UTF-8");
-    std::string s = "Привет";
-    std::cout << s << std::endl;
 
-    std::wstring ws = L"Привет";
-    std::wcout << ws << std::endl;
+    Settings settings;
+
+    Program_Exec cmd;
+    cmd.exec("ping", {"-n", "3", "8.8.8.8"});
+    cmd.exec("ping", {"-n", "3", "8.8.8.8"});
+    cmd.exec("ping", {"-n", "3", "8.8.8.8"});
+    return 1;
 
 
 
-
-//    Media_Player media_player;
-
-//    media_player.play("C:\\Qt\\myProg\\bells\\sounds\\Повседневный.mp3");
-//    Settings settings;
 //    Current_Shedule current_shedule;
 
 //    const General  *general = settings.general();
