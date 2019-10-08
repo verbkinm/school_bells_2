@@ -1,4 +1,7 @@
 #include <algorithm>
+#include <iostream>
+#include <QString>
+#include <QDebug>
 #include "current_shedule.h"
 
 Current_Shedule::Current_Shedule()
@@ -27,6 +30,17 @@ Call Current_Shedule::getLast_call()
 
     Call call(it->first, it->second);
     return call;
+}
+
+void Current_Shedule::printTable() const
+{
+    int number = 0;
+    for( const auto &[time, sound] : _call_table)
+    {
+        if(_current_iterator->first == time)
+            std::cout << "*";
+        std::cout << number++ << ": " << time.toString() << " - " << sound << std::endl;
+    }
 }
 
 void Current_Shedule::setNext_call_according_local_time()

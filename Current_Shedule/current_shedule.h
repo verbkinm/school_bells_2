@@ -14,6 +14,8 @@ public:
     Call getNext_call();
     Call getLast_call();
 
+    void printTable() const;
+
 //    const std::map<Time, std::string> *table() const;
 
     void clear();

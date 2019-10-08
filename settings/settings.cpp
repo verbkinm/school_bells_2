@@ -119,6 +119,7 @@ void Settings::write_settings_general()
     _settings.setValue("sound_dir_path", QString::fromUtf8(_general.getSound_dir_path().c_str()));
     _settings.setValue("call_before_lesson", _general.getCall_before_lesson());
     _settings.setValue("sound_before_lesson", QString::fromUtf8(_general.getSound_before_lesson().c_str()));
+//    _settings.setValue("sound_before_lesson", "C:\\Users\\verbkinm\\Рабочий стол\\Гимн Лицея_ Павленко.mp3");
     _settings.setValue("number_of_minutes_to_call_before_lesson", _general.getNumber_of_minutes_to_call_before_lesson());
 }
 

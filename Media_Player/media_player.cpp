@@ -1,22 +1,40 @@
 #include "../Log/log.h"
 #include "media_player.h"
+#include <QDebug>
+#include <iostream>
 
-Media_Player::Media_Player(QObject *parent) : QObject(parent)
+Media_Player::Media_Player(QObject *parent) : QObject(parent), _player(nullptr)
 {
-    connect(&_player, SIGNAL(error(QMediaPlayer::Error)), SLOT(slotError(QMediaPlayer::Error)));
-    connect(&_player, SIGNAL(stateChanged(QMediaPlayer::State)), SLOT(slotState_Changed(QMediaPlayer::State)));
+    _player = new QMediaPlayer;
+
+    connect(_player, SIGNAL(error(QMediaPlayer::Error)), SLOT(slotError(QMediaPlayer::Error)));
+    connect(_player, SIGNAL(stateChanged(QMediaPlayer::State)), SLOT(slotState_Changed(QMediaPlayer::State)));
+}
+
+Media_Player::~Media_Player()
+{
+    if(_player)
+        delete _player;
 }
 
 void Media_Player::play(const std::string &sound)
 {
-    _sound = sound;
+//    _sound = sound;
+//    _player->setVolume(100);
+//    _player->setMedia(QUrl::fromLocalFile(_sound.c_str()));
+//    std::cout << "play now " << _sound;
+//    _player->play();
+
+    QMediaPlayer _player;
+    std::string _sound = "C:\\1.mp3";
     _player.setVolume(100);
-    _player.setMedia(QUrl::fromLocalFile(QString::fromUtf8(sound.c_str())));
+    _player.setMedia(QUrl::fromLocalFile(_sound.c_str()));
     _player.play();
 }
 
 void Media_Player::slotState_Changed(QMediaPlayer::State state)
 {
+//    qDebug() << state;
     std::string str_state;
 
     switch (state)

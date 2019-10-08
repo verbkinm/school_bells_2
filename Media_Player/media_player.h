@@ -8,12 +8,13 @@ class Media_Player : QObject
     Q_OBJECT
 public:
     Media_Player(QObject *parent = nullptr);
+    ~Media_Player();
 
     void play(const std::string &sound);
 
 private:
     std::string _sound;
-    QMediaPlayer _player;
+    QMediaPlayer *_player;
 
 private slots:
     void slotState_Changed(QMediaPlayer::State state);
