@@ -5,6 +5,7 @@
 #include "Media_Player/media_player.h"
 #include "Log/log.h"
 #include "Program_exec/program_exec.h"
+#include "timer.h"
 
 #include <windows.h>
 
@@ -13,8 +14,6 @@
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
-
-    std::cout << "киррилица" << std::endl;
 
     Current_Shedule current_shedule;
 
@@ -46,27 +45,21 @@ int main(int argc, char *argv[])
         }
     }
 
-    Media_Player media_player;
-    try
-    {
-        current_shedule.printTable();
+    current_shedule.printTable();
+    current_shedule.watch();
 
-//        media_player.play(current_shedule.getNext_call().sound());
-        media_player.play("C:\\1.mp3");
-        media_player.play("C:\\Повседневный.mp3");
-//        std::clog << current_shedule.getNext_call().time().toString() << std::endl;
-//        std::clog << current_shedule.getLast_call().time().toString() << std::endl;
-    }
-    catch(std::out_of_range &)
-    {
-        std::cout << "shedule is empty" << std::endl;
-    }
+//    Media_Player media_player;
+//    try
+//    {
+//        current_shedule.printTable();
+////        media_player.play(current_shedule.getNext_call().sound());
+////        media_player.play("C:\\Qt\\myProg\\bells\\sounds\\Зарядка.mp3");
+//    }
+//    catch(std::out_of_range &)
+//    {
+//        std::cout << "shedule is empty" << std::endl;
+//    }
 
-//    QMediaPlayer _player;
-//    std::string _sound = "C:\\1.mp3";
-//    _player.setVolume(100);
-//    _player.setMedia(QUrl::fromLocalFile(_sound.c_str()));
-//    _player.play();
 
     return a.exec();
 }

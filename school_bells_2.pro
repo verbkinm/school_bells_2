@@ -18,7 +18,8 @@ SOURCES += \
         Settings/settings.cpp \
         Log/log.cpp \
         main.cpp \
-        Media_Player/media_player.cpp
+        Media_Player/media_player.cpp \
+        timer.cpp
 
 HEADERS += \
     Program_exec/program_exec.h \
@@ -33,6 +34,7 @@ HEADERS += \
     Settings/Shedule/time/time.h \
     Media_Player/media_player.h \
     Settings/settings.h \
-    Log/log.h
+    Log/log.h \
+    timer.h
 
 DISTFILES +=

@@ -11,48 +11,49 @@ Media_Player::Media_Player(QObject *parent) : QObject(parent)
 
 Media_Player::~Media_Player()
 {
-//    if(_player)
-//        delete _player;
+    for(auto &child : this->children())
+    {
+        QMediaPlayer *player = qobject_cast<QMediaPlayer *>(child);
+        Log::write("Warnong. Media file: \"" + player->property("sound").toString().toStdString() + "\" is forcibly stopped.");
+        player->stop();
+    }
 }
 
 void Media_Player::play(const std::string &sound)
 {
     QMediaPlayer *player = new QMediaPlayer;
-    player->setProperty("sound", QVariant(sound));
+    player->setParent(this);
+    player->setProperty("sound", QVariant(sound.c_str()));
 
     connect(player, SIGNAL(error(QMediaPlayer::Error)), SLOT(slotError(QMediaPlayer::Error)));
     connect(player, SIGNAL(stateChanged(QMediaPlayer::State)), SLOT(slotState_Changed(QMediaPlayer::State)));
 
-//    _sound = sound;
     player->setVolume(100);
     player->setMedia(QUrl::fromLocalFile(sound.c_str()));
-    std::cout << "play now " << sound;
     player->play();
 }
 
 void Media_Player::slotState_Changed(QMediaPlayer::State state)
 {
     QMediaPlayer *player = qobject_cast<QMediaPlayer *>(sender());
-
-
     std::string str_state;
-
     switch (state)
     {
     case (QMediaPlayer::StoppedState): str_state = "QMediaPlayer::StoppedState. The media player is not playing content, playback will begin from the start of the current track.";
         break;
     case(QMediaPlayer::PlayingState): str_state = "QMediaPlayer::PlayingState. The media player is currently playing content.";
-        if(player)
-            delete player;
         break;
     case (QMediaPlayer::PausedState): str_state = "QMediaPlayer::PausedState. The media player has paused playback, playback of the current track will resume from the position the player was paused at.";
         break;
     }
-    Log::write("Media file: \"" + _sound + "\". " + str_state);
+    Log::write("Media file: \"" + player->property("sound").toString().toStdString() + "\". " + str_state);
+    if(state == QMediaPlayer::StoppedState && player)
+        delete player;
 }
 
 void Media_Player::slotError(QMediaPlayer::Error error)
 {
+    QMediaPlayer *player = qobject_cast<QMediaPlayer *>(sender());
     std::string str_error;
     switch (error)
     {
@@ -69,9 +70,7 @@ void Media_Player::slotError(QMediaPlayer::Error error)
     default:
         break;
     }
-    Log::write("Error. Media file: \"" + _sound + "\". " + str_error);
-
-    QMediaPlayer *player = qobject_cast<QMediaPlayer *>(sender());
+    Log::write("Error. Media file: \"" + player->property("sound").toString().toStdString() + "\". " + str_error);
     if(player)
         delete player;
 }

@@ -12,10 +12,6 @@ public:
 
     void play(const std::string &sound);
 
-private:
-    std::string _sound;
-//    QMediaPlayer *_player;
-
 private slots:
     void slotState_Changed(QMediaPlayer::State state);
     void slotError(QMediaPlayer::Error error);
