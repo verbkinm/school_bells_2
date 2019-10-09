@@ -46,13 +46,14 @@ int main(int argc, char *argv[])
         }
     }
 
-
+    Media_Player media_player;
     try
     {
         current_shedule.printTable();
-        Media_Player media_player;
+
 //        media_player.play(current_shedule.getNext_call().sound());
-//        media_player.play("C:\\1.mp3");
+        media_player.play("C:\\1.mp3");
+        media_player.play("C:\\Повседневный.mp3");
 //        std::clog << current_shedule.getNext_call().time().toString() << std::endl;
 //        std::clog << current_shedule.getLast_call().time().toString() << std::endl;
     }
@@ -61,11 +62,11 @@ int main(int argc, char *argv[])
         std::cout << "shedule is empty" << std::endl;
     }
 
-    QMediaPlayer _player;
-    std::string _sound = "C:\\1.mp3";
-    _player.setVolume(100);
-    _player.setMedia(QUrl::fromLocalFile(_sound.c_str()));
-    _player.play();
+//    QMediaPlayer _player;
+//    std::string _sound = "C:\\1.mp3";
+//    _player.setVolume(100);
+//    _player.setMedia(QUrl::fromLocalFile(_sound.c_str()));
+//    _player.play();
 
     return a.exec();
 }

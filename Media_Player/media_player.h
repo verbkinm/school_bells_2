@@ -14,7 +14,7 @@ public:
 
 private:
     std::string _sound;
-    QMediaPlayer *_player;
+//    QMediaPlayer *_player;
 
 private slots:
     void slotState_Changed(QMediaPlayer::State state);
