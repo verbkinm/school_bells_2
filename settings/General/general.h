@@ -2,6 +2,7 @@
 #define GENERAL_H
 
 #include <string>
+#include <list>
 
 class General
 {
@@ -23,13 +24,24 @@ public:
     std::string getSound_before_lesson() const;
     void setSound_before_lesson(const std::string &sound_before_lesson);
 
+    std::string getPrograms_before_bell() const;
+    void setPrograms_before_bell(const std::string &value);
+
+    std::string getPrograms_after_bell() const;
+    void setPrograms_after_bell(const std::string &value);
+
 private:
     std::string _manual_call;
     std::string _sound_dir_path;
 
     bool _call_before_lesson;
     int _number_of_minutes_to_call_before_lesson;
+
     std::string _sound_before_lesson;
+
+    std::string _programs_before_bell;
+    std::string _programs_after_bell;
+
 };
 
 #endif // GENERAL_H

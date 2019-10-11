@@ -1,8 +1,8 @@
-#include "../Log/log.h"
-#include "media_player.h"
-#include <QDebug>
 #include <iostream>
 #include <QVariant>
+
+#include "../Log/log.h"
+#include "media_player.h"
 
 Media_Player::Media_Player(QObject *parent) : QObject(parent)
 {
@@ -14,15 +14,15 @@ Media_Player::~Media_Player()
     for(auto &child : this->children())
     {
         QMediaPlayer *player = qobject_cast<QMediaPlayer *>(child);
-        Log::write("Warnong. Media file: \"" + player->property("sound").toString().toStdString() + "\" is forcibly stopped.");
+        Log::write("Warrning. Media file: \"" + player->property("sound").toString().toStdString() + "\" is forcibly stopped.");
         player->stop();
     }
 }
 
 void Media_Player::play(const std::string &sound)
 {
-    QMediaPlayer *player = new QMediaPlayer;
-    player->setParent(this);
+    QMediaPlayer *player = new QMediaPlayer(this);
+    qDebug() << "parent";
     player->setProperty("sound", QVariant(sound.c_str()));
 
     connect(player, SIGNAL(error(QMediaPlayer::Error)), SLOT(slotError(QMediaPlayer::Error)));

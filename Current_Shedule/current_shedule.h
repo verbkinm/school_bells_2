@@ -3,15 +3,16 @@
 
 #include <map>
 #include <QTimer>
-#include "../timer.h"
 #include "call.h"
+#include "Media_Player/media_player.h"
+#include "Program_exec/program_exec.h"
+#include "../Settings/General/general.h"
 
-class Current_Shedule
+class Current_Shedule : QObject
 {
+    Q_OBJECT
 public:
-    static void callback(Current_Shedule& shedule, Timer &tr, std::chrono::milliseconds delay);
-
-    Current_Shedule();
+    Current_Shedule(QObject *parent = nullptr);
 
     void add(const Time &time, const std::string &sound);
     void clear();
@@ -23,6 +24,8 @@ public:
     void watch();
     void unwatch();
 
+    void setGeneral(const General *general);
+
 private:
     void check_shedule_size() const;
     void setNext_call_according_local_time();
@@ -30,7 +33,13 @@ private:
 
     std::map<Time, std::string> _call_table;
     std::map<Time, std::string>::iterator _current_iterator;
-    Timer _timer;
+    QTimer _timer;
+    Media_Player _player;
+    Program_Exec _cmd;
+    General const *_general;
+
+private slots:
+    void slotTimer_out();
 };
 
 #endif // CURRENT_SHEDULE_H

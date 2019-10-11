@@ -23,6 +23,9 @@ void Settings::read_settings_general()
     _general.setCall_before_lesson(_settings.value("call_before_lesson", false).toBool());
     _general.setSound_before_lesson(_settings.value("sound_before_lesson", "нет").toString().toStdString());
     _general.setNumber_of_minutes_to_call_before_lesson(_settings.value("number_of_minutes_to_call_before_lesson", 0).toInt());
+
+    _general.setPrograms_before_bell(_settings.value("programs_before_bell", "").toString().toStdString());
+    _general.setPrograms_after_bell(_settings.value("programs_after_bell", "").toString().toStdString());
 }
 
 void Settings::read_settings_network()
@@ -121,6 +124,9 @@ void Settings::write_settings_general()
     _settings.setValue("sound_before_lesson", QString::fromUtf8(_general.getSound_before_lesson().c_str()));
 //    _settings.setValue("sound_before_lesson", "C:\\Users\\verbkinm\\Рабочий стол\\Гимн Лицея_ Павленко.mp3");
     _settings.setValue("number_of_minutes_to_call_before_lesson", _general.getNumber_of_minutes_to_call_before_lesson());
+
+    _settings.setValue("programs_before_bell", _general.getPrograms_before_bell().c_str());
+    _settings.setValue("programs_after_bell", _general.getPrograms_after_bell().c_str());
 }
 
 void Settings::write_settings_network()

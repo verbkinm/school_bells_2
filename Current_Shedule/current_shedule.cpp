@@ -1,34 +1,12 @@
 #include <algorithm>
 #include <iostream>
 #include <QString>
-#include <QDebug>
+#include <QCoreApplication>
 #include "current_shedule.h"
 
-void Current_Shedule::callback(Current_Shedule& shedule, Timer &tr, std::chrono::milliseconds delay)
+Current_Shedule::Current_Shedule(QObject *parent) : QObject (parent), _general(nullptr)
 {
-    std::lock_guard<std::mutex> lock(tr.m_changing_mutex);
-    if(tr._stoped)
-        return;
-
-    std::cout << shedule._current_iterator->first.toString() << std::endl;
-    if(Time::fromLocal_time() == shedule._current_iterator->first)
-    {
-        shedule._current_iterator++;
-        shedule.circularity_of_iterator();
-    }
-
-    std::this_thread::sleep_for(delay);
-
-    void (*func)(Current_Shedule&, Timer&, std::chrono::milliseconds);
-    func = callback;
-
-    lock.~lock_guard();
-    tr.start(func, shedule);
-}
-
-Current_Shedule::Current_Shedule()
-{
-
+    connect(&_timer, SIGNAL(timeout()), SLOT(slotTimer_out()));
 }
 
 void Current_Shedule::add(const Time &time, const std::string &sound)
@@ -68,9 +46,9 @@ void Current_Shedule::printTable() const
 void Current_Shedule::setNext_call_according_local_time()
 {
     _current_iterator = std::find_if(_call_table.begin(), _call_table.end(),
-                           [] (const std::pair<Time, std::string> pair)
-//                           { return pair.first >= Time(8,50)/*Time::fromLocal_time()*/;});
-                           { return pair.first >= Time::fromLocal_time();});
+                                     [] (const std::pair<Time, std::string> pair)
+                                     //                           { return pair.first >= Time(8,50)/*Time::fromLocal_time()*/;});
+    { return pair.first >= Time::fromLocal_time();});
     circularity_of_iterator();
 }
 
@@ -78,6 +56,22 @@ void Current_Shedule::circularity_of_iterator()
 {
     if(_current_iterator == _call_table.end() && _call_table.size())
         _current_iterator = _call_table.begin();
+}
+
+void Current_Shedule::slotTimer_out()
+{
+    if(Time::fromLocal_time() == _current_iterator->first)
+    {
+        _cmd.exec(_general->getPrograms_before_bell());
+        this->_player.play(_current_iterator->second);
+        _current_iterator++;
+        circularity_of_iterator();
+    }
+}
+
+void Current_Shedule::setGeneral(const General *general)
+{
+    _general = general;
 }
 
 void Current_Shedule::clear()
@@ -88,9 +82,7 @@ void Current_Shedule::clear()
 
 void Current_Shedule::watch()
 {
-    void (*func)(Current_Shedule&, Timer&, std::chrono::milliseconds);
-    func = callback;
-    _timer.start(func, *this);
+    _timer.start(1000);
 }
 
 void Current_Shedule::unwatch()

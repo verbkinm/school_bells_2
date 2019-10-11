@@ -1,3 +1,4 @@
+#include <sstream>
 #include "general.h"
 
 General::General() : _manual_call("нет"), _sound_dir_path ("sounds"),
@@ -57,4 +58,24 @@ std::string General::getSound_before_lesson() const
 void General::setSound_before_lesson(const std::string &sound_before_lesson)
 {
     _sound_before_lesson = sound_before_lesson;
+}
+
+std::string General::getPrograms_before_bell() const
+{
+    return _programs_before_bell;
+}
+
+void General::setPrograms_before_bell(const std::string &value)
+{
+    _programs_before_bell = value;
+}
+
+std::string General::getPrograms_after_bell() const
+{
+    return _programs_after_bell;
+}
+
+void General::setPrograms_after_bell(const std::string &value)
+{
+    _programs_after_bell = value;
 }

@@ -5,7 +5,6 @@
 #include "Media_Player/media_player.h"
 #include "Log/log.h"
 #include "Program_exec/program_exec.h"
-#include "timer.h"
 
 #include <windows.h>
 
@@ -45,15 +44,16 @@ int main(int argc, char *argv[])
         }
     }
 
-    current_shedule.printTable();
+//    current_shedule.printTable();
+    current_shedule.setGeneral(general);
     current_shedule.watch();
 
 //    Media_Player media_player;
 //    try
 //    {
 //        current_shedule.printTable();
-////        media_player.play(current_shedule.getNext_call().sound());
-////        media_player.play("C:\\Qt\\myProg\\bells\\sounds\\Зарядка.mp3");
+//        media_player.play(current_shedule.getNext_call().sound());
+//        media_player.play("C:\\Qt\\myProg\\bells\\sounds\\Зарядка.mp3");
 //    }
 //    catch(std::out_of_range &)
 //    {
