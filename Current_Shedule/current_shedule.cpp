@@ -1,7 +1,6 @@
 #include <algorithm>
 #include <iostream>
 #include <QString>
-#include <QCoreApplication>
 #include "current_shedule.h"
 
 Current_Shedule::Current_Shedule(QObject *parent) : QObject (parent), _general(nullptr)
@@ -15,25 +14,14 @@ void Current_Shedule::add(const Time &time, const std::string &sound)
     setNext_call_according_local_time();
 }
 
-Call Current_Shedule::getNext_call() const
+void Current_Shedule::remove(const Time &time)
 {
-    check_shedule_size();
-    return {_current_iterator->first, _current_iterator->second};
-}
-
-Call Current_Shedule::getLast_call()
-{
-    check_shedule_size();
-    auto it = _current_iterator;
-    if(it == _call_table.begin())
-        it = --(_call_table.end());
-
-    Call call(it->first, it->second);
-    return call;
+    _call_table.erase(time);
 }
 
 void Current_Shedule::printTable() const
 {
+    std::cout << "Shedule table:" << std::endl;
     int number = 0;
     for( const auto &[time, sound] : _call_table)
     {
@@ -64,14 +52,24 @@ void Current_Shedule::slotTimer_out()
     {
         _cmd.exec(_general->getPrograms_before_bell());
         this->_player.play(_current_iterator->second);
+        _cmd.exec(_general->getPrograms_after_bell());
         _current_iterator++;
         circularity_of_iterator();
     }
 }
 
-void Current_Shedule::setGeneral(const General *general)
+void Current_Shedule::setGeneral_settings(const General *general)
 {
     _general = general;
+}
+
+std::string Current_Shedule::getString_from_call_table()
+{
+    std::string result;
+    for( auto &item : _call_table)
+        result += item.first.toString() + ",";
+
+    return result;
 }
 
 void Current_Shedule::clear()

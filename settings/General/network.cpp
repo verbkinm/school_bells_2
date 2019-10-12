@@ -1,6 +1,6 @@
 #include "network.h"
 
-Network::Network() : _addr("localhost"), _port(80), _run_at_program_start(false)
+Network::Network() : _addr("localhost"), _port(80), _enable(false)
 {
 
 }
@@ -26,12 +26,12 @@ void Network::setPort(int value)
     _port = value;
 }
 
-bool Network::isRun_at_program_start() const
+bool Network::isEnable() const
 {
-    return _run_at_program_start;
+    return _enable;
 }
 
-void Network::setRun_at_program_start(bool value)
+void Network::setEnable(bool value)
 {
-    _run_at_program_start = value;
+    _enable = value;
 }

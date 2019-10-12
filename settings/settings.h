@@ -15,6 +15,8 @@ public:
     const General *general() const;
     void setGeneral(const General &general);
 
+    const Network *network() const;
+
     const std::array<Day, 7> *days() const;
     const std::vector<Shedule> *shedules() const;
 

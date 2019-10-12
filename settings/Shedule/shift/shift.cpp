@@ -2,7 +2,7 @@
 
 #include "shift.h"
 
-Shift::Shift() : _enable(false)
+Shift::Shift() : _enable(false), _start_number_of_lesson(1)
 {
 
 }
@@ -38,4 +38,14 @@ void Shift::remove_lesson(int index)
         std::cerr << e.what() << std::endl;
         return;
     }
+}
+
+int Shift::getStart_number_of_lesson() const
+{
+    return _start_number_of_lesson;
+}
+
+void Shift::setStart_number_of_lesson(int start_number_of_lesson)
+{
+    _start_number_of_lesson = start_number_of_lesson;
 }

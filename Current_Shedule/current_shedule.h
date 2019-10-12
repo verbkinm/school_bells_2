@@ -3,7 +3,7 @@
 
 #include <map>
 #include <QTimer>
-#include "call.h"
+#include "Settings/Shedule/time/time.h"
 #include "Media_Player/media_player.h"
 #include "Program_exec/program_exec.h"
 #include "../Settings/General/general.h"
@@ -15,16 +15,16 @@ public:
     Current_Shedule(QObject *parent = nullptr);
 
     void add(const Time &time, const std::string &sound);
+    void remove(const Time &time);
     void clear();
-
-    Call getNext_call() const;
-    Call getLast_call();
 
     void printTable() const;
     void watch();
     void unwatch();
 
-    void setGeneral(const General *general);
+    void setGeneral_settings(const General *general);
+
+    std::string getString_from_call_table();
 
 private:
     void check_shedule_size() const;

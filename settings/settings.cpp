@@ -33,7 +33,7 @@ void Settings::read_settings_network()
     _settings.beginGroup("TCP_Server");
     _network.setAddr(_settings.value("addr", "localhost").toString().toStdString());
     _network.setPort(_settings.value("port", 80).toInt());
-    _network.setRun_at_program_start(_settings.value("run_at_program_start", false).toBool());
+    _network.setEnable(_settings.value("enable", false).toBool());
     _settings.endGroup();
 }
 
@@ -77,9 +77,9 @@ void Settings::read_settings_shedule_shift(Shedule &shedule)
     {
         Shift shift;
         shift.setEnable(_settings.value("shift" + QString::number(shift_number) + "_enable", false).toBool());
+        shift.setStart_number_of_lesson(_settings.value("shift" + QString::number(shift_number) + "_start_number_of_lesson", 1).toInt());
 
         read_settings_shedule_lesson(shift, shift_number);
-
         shedule._shifts.push_back(shift);
     }
 }
@@ -134,7 +134,7 @@ void Settings::write_settings_network()
     _settings.beginGroup("TCP_Server");
     _settings.setValue("addr", QString::fromUtf8(_network.getAddr().c_str()));
     _settings.setValue("port", _network.getPort());
-    _settings.setValue("run_at_program_start", _network.isRun_at_program_start());
+    _settings.setValue("enable", _network.isEnable());
     _settings.endGroup();
 }
 
@@ -169,6 +169,7 @@ void Settings::write_settings_shedule_shift(size_t shedule_number)
 void Settings::write_settings_shedule_lesson(size_t shedule_number, size_t shift_number)
 {
     _settings.setValue("shift" + QString::number(shift_number) + "_enable", _shedules.at(shedule_number)._shifts.at(shift_number).isEnable());
+    _settings.setValue("shift" + QString::number(shift_number) + "_start_number_of_lesson", _shedules.at(shedule_number)._shifts.at(shift_number).getStart_number_of_lesson());
     for(size_t lesson_number = 0; lesson_number < _shedules.at(shift_number)._shifts.at(shift_number).getNumber_of_lessons(); ++lesson_number)
     {
         _settings.setValue("shift" + QString::number(shift_number) + "_lesson" + QString::number(lesson_number) + "_enable", _shedules.at(shedule_number)._shifts.at(shift_number)._lessons.at(lesson_number).isEnable());
@@ -187,6 +188,11 @@ const General *Settings::general() const
 void Settings::setGeneral(const General &general)
 {
     _general = general;
+}
+
+const Network *Settings::network() const
+{
+    return &_network;
 }
 
 const std::array<Day, 7> *Settings::days() const

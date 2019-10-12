@@ -1,12 +1,11 @@
 TARGET = school_bells_2
 TEMPLATE = app
-QT += core multimedia
+QT += core multimedia websockets
 CONFIG += console c++17
 CONFIG -= app_bundle
 
 SOURCES += \
         Program_exec/program_exec.cpp \
-        Current_Shedule\call.cpp \
         Current_Shedule\current_shedule.cpp \
         Settings/Day/day.cpp \
         Settings/General/general.cpp \
@@ -17,12 +16,13 @@ SOURCES += \
         Settings/Shedule/time/time.cpp \
         Settings/settings.cpp \
         Log/log.cpp \
+        Web_Socket_server/web_socket_server.cpp \
         main.cpp \
-        Media_Player/media_player.cpp
+        Media_Player/media_player.cpp \
+        school_bells.cpp
 
 HEADERS += \
     Program_exec/program_exec.h \
-    Current_Shedule\call.h \
     Current_Shedule\current_shedule.h \
     Settings/Day/day.h \
     Settings/General/general.h \
@@ -33,6 +33,8 @@ HEADERS += \
     Settings/Shedule/time/time.h \
     Media_Player/media_player.h \
     Settings/settings.h \
-    Log/log.h
+    Log/log.h \
+    Web_Socket_server/web_socket_server.h \
+    school_bells.h
 
 DISTFILES +=

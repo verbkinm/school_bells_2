@@ -14,13 +14,13 @@ public:
     int getPort() const;
     void setPort(int value);
 
-    bool isRun_at_program_start() const;
-    void setRun_at_program_start(bool value);
+    bool isEnable() const;
+    void setEnable(bool value);
 
 private:
     std::string _addr;
     int _port;
-    bool _run_at_program_start;
+    bool _enable;
 
 };
 
