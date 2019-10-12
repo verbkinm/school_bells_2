@@ -24,8 +24,8 @@ public:
     Time getTime_end() const;
     void setTime_end(const Time &time_end);
 
-    std::string getTime_begin();
-    std::string getTime_end();
+    std::string getTime_begin_str() const;
+    std::string getTime_end_str() const;
 
 private:
     bool enable;

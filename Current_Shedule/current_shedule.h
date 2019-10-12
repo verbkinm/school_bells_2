@@ -24,8 +24,6 @@ public:
 
     void setGeneral_settings(const General *general);
 
-    std::string getString_from_call_table();
-
 private:
     void check_shedule_size() const;
     void setNext_call_according_local_time();

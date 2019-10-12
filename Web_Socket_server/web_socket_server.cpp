@@ -8,14 +8,14 @@ static QString getIdentifier(QWebSocket *peer)
                                        QString::number(peer->peerPort()));
 }
 
-Web_socket_server::Web_socket_server(quint16 port, QObject *parent) :
+Web_socket_server::Web_socket_server(QHostAddress addr, quint16 port, QObject *parent) :
     QObject(parent),
     m_pWebSocketServer(new QWebSocketServer(QStringLiteral("Chat Server"),
                        QWebSocketServer::NonSecureMode, this))
 {
-    if (m_pWebSocketServer->listen(QHostAddress::Any, port))
+    if (m_pWebSocketServer->listen(addr, port))
     {
-        QTextStream(stdout) << "Chat Server listening on port " << port << '\n';
+        QTextStream(stdout) << "Server listening on address \"" << m_pWebSocketServer->serverUrl().toString() << "\"" << " and port \"" << port << "\"\n";
         connect(m_pWebSocketServer, &QWebSocketServer::newConnection, this, &Web_socket_server::onNewConnection);
     }
 }
@@ -31,7 +31,7 @@ void Web_socket_server::onNewConnection()
     QTextStream(stdout) << getIdentifier(pSocket) << " connected!\n";
     pSocket->setParent(this);
 
-//    connect(pSocket, &QWebSocket::textMessageReceived, this, &Web_socket_server::processMessage);
+    connect(pSocket, &QWebSocket::textMessageReceived, this, &Web_socket_server::slotGet_message);
     connect(pSocket, &QWebSocket::disconnected, this, &Web_socket_server::socketDisconnected);
 
     m_clients << pSocket;
@@ -43,7 +43,7 @@ void Web_socket_server::onNewConnection()
 //    pSocket->sendTextMessage("monitor_table,0,8:30,9:45");
 }
 
-void Web_socket_server::processMessage(QWebSocket *web_socket, const QString &message)
+void Web_socket_server::slotSend_message(QWebSocket *web_socket, const QString &message)
 {
     web_socket->sendTextMessage(message);
 //    QWebSocket *pSender = qobject_cast<QWebSocket *>(sender());
@@ -51,7 +51,15 @@ void Web_socket_server::processMessage(QWebSocket *web_socket, const QString &me
 //    {
 //        if (pClient != pSender) //don't echo message back to sender
 //            pClient->sendTextMessage(message);
-//    }
+    //    }
+}
+
+void Web_socket_server::slotGet_message(const QString &message)
+{
+    auto pSocket = qobject_cast<QWebSocket *>(sender());
+
+    if(message == "monitor_protocol")
+        emit signalGet_message_from_monitor(pSocket);
 }
 
 void Web_socket_server::socketDisconnected()

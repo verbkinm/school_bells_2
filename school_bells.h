@@ -24,6 +24,9 @@ private:
     void fill_shifts(const Shift &shift);
     void create_day_shedule();
 
+    void fill_shift_in_sending_data(std::string &message) const;
+    void fill_lesson_in_sending_data(const Shift &shift, std::string &message) const;
+
     Settings _settings;
     Shedule _shedule;
     Current_Shedule _current_shedule;
@@ -36,6 +39,7 @@ private slots:
     void slotNew_day();
 
     void slotSendData(QWebSocket *web_socket);
+    void slotSendData_to_monitor(QWebSocket *web_socket);
 };
 
 #endif // SCHOOL_BELLS_H

@@ -10,8 +10,9 @@ School_bells::School_bells(QObject *parent) : QObject (parent), _current_day_of_
 
     if(_settings.network()->isEnable())
     {
-        _spWeb_socket_server = std::make_unique<Web_socket_server>();
+        _spWeb_socket_server = std::make_unique<Web_socket_server>(QHostAddress(_settings.network()->getAddr().c_str()), _settings.network()->getPort());
         connect(&*_spWeb_socket_server, SIGNAL(signalNew_connection(QWebSocket *)), this, SLOT(slotSendData(QWebSocket *)));
+        connect(&*_spWeb_socket_server, SIGNAL(signalGet_message_from_monitor(QWebSocket *)), this, SLOT(slotSendData_to_monitor(QWebSocket *)));
     }
 }
 
@@ -37,12 +38,13 @@ void School_bells::fill_shifts(const Shift &shift)
 {
     for (const auto &lesson : shift._lessons)
     {
-        if(!lesson.isEnable())
-            continue;
-        if(_settings.general()->getCall_before_lesson())
-            _current_shedule.add(lesson.getTime_begin() - Time(0, _settings.general()->getNumber_of_minutes_to_call_before_lesson()), _settings.general()->getSound_before_lesson());
-        _current_shedule.add(lesson.getTime_begin(), lesson.getSound_begin());
-        _current_shedule.add(lesson.getTime_end(), lesson.getSound_end());
+        if(lesson.isEnable())
+        {
+            if(_settings.general()->getCall_before_lesson())
+                _current_shedule.add(lesson.getTime_begin() - Time(0, _settings.general()->getNumber_of_minutes_to_call_before_lesson()), _settings.general()->getSound_before_lesson());
+            _current_shedule.add(lesson.getTime_begin(), lesson.getSound_begin());
+            _current_shedule.add(lesson.getTime_end(), lesson.getSound_end());
+        }
     }
 }
 
@@ -56,12 +58,37 @@ void School_bells::create_day_shedule()
     _current_shedule.printTable();
 }
 
+void School_bells::fill_shift_in_sending_data(std::string &message) const
+{
+    for(size_t shift_number = 0; shift_number < _shedule._shifts.size(); ++shift_number)
+    {
+        Shift shift = _shedule._shifts.at(shift_number);
+        if(!shift.isEnable())
+            continue;
+        message += std::to_string(shift_number);
+        message += "," + std::to_string(shift.getStart_number_of_lesson());
+        fill_lesson_in_sending_data(shift, message);
+        message += ";";
+    }
+}
+
+void School_bells::fill_lesson_in_sending_data(const Shift &shift, std::string &message) const
+{
+    for (auto &lesson : shift._lessons)
+    {
+        if(lesson.isEnable())
+        {
+            message += "," + lesson.getTime_begin_str();
+            message += "," + lesson.getTime_end_str();
+        }
+    }
+}
+
 void School_bells::slotNew_day()
 {
     if(_current_day_of_week == Day::current_day_of_week())
         return;
 
-    std::cout << "new day" << std::endl;
     _day_timer.stop();
     create_day_shedule();
     _current_day_of_week = Day::current_day_of_week();
@@ -70,6 +97,12 @@ void School_bells::slotNew_day()
 
 void School_bells::slotSendData(QWebSocket *web_socket)
 {
-    QString message = _current_shedule.getString_from_call_table().c_str();
-    _spWeb_socket_server.get()->processMessage(web_socket, message);
+    _spWeb_socket_server.get()->slotSend_message(web_socket, "protocol");
+}
+
+void School_bells::slotSendData_to_monitor(QWebSocket *web_socket)
+{
+    std::string message;
+    fill_shift_in_sending_data(message);
+    _spWeb_socket_server.get()->slotSend_message(web_socket, message.c_str());
 }

@@ -1,5 +1,6 @@
 #include <sstream>
 #include <ctime>
+#include <iomanip>
 #include "time.h"
 
 Time Time::fromLocal_time()
@@ -71,7 +72,9 @@ void Time::setFrom_string(std::string str)
 std::string Time::toString() const
 {
     std::stringstream ss;
-    ss << hours() << ":" << minutes();
+    ss << std::setfill('0') << std::setw (2) << hours()
+       << ":"
+       << std::setfill('0') << std::setw (2) << minutes();
     return ss.str();
 }
 

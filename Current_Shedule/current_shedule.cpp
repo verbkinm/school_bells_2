@@ -63,15 +63,6 @@ void Current_Shedule::setGeneral_settings(const General *general)
     _general = general;
 }
 
-std::string Current_Shedule::getString_from_call_table()
-{
-    std::string result;
-    for( auto &item : _call_table)
-        result += item.first.toString() + ",";
-
-    return result;
-}
-
 void Current_Shedule::clear()
 {
     _timer.stop();

@@ -55,12 +55,12 @@ void Lesson::setTime_end(const Time &time_end)
     _time_end = time_end;
 }
 
-std::string Lesson::getTime_begin()
+std::string Lesson::getTime_begin_str() const
 {
     return _time_begin.toString();
 }
 
-std::string Lesson::getTime_end()
+std::string Lesson::getTime_end_str() const
 {
     return _time_end.toString();
 }
