@@ -2,6 +2,9 @@
 
 #include <QWebSocket>
 
+#define MONITOR_PROTOCOL "monitor_protocol"
+#define MANAGER_PROTOCOL "manager_protocol"
+
 static QString getIdentifier(QWebSocket *peer)
 {
     return QStringLiteral("%1:%2").arg(peer->peerAddress().toString(),
@@ -15,7 +18,7 @@ Web_socket_server::Web_socket_server(QHostAddress addr, quint16 port, QObject *p
 {
     if (m_pWebSocketServer->listen(addr, port))
     {
-        QTextStream(stdout) << "Server listening on address \"" << m_pWebSocketServer->serverUrl().toString() << "\"" << " and port \"" << port << "\"\n";
+        QTextStream(stdout) << "Server listening on address \"" << m_pWebSocketServer->serverUrl().toString() + "\n";
         connect(m_pWebSocketServer, &QWebSocketServer::newConnection, this, &Web_socket_server::onNewConnection);
     }
 }
@@ -58,8 +61,10 @@ void Web_socket_server::slotGet_message(const QString &message)
 {
     auto pSocket = qobject_cast<QWebSocket *>(sender());
 
-    if(message == "monitor_protocol")
+    if(message == MONITOR_PROTOCOL)
         emit signalGet_message_from_monitor(pSocket);
+    if(message == MANAGER_PROTOCOL)
+        ;
 }
 
 void Web_socket_server::socketDisconnected()

@@ -102,7 +102,7 @@ void School_bells::slotSendData(QWebSocket *web_socket)
 
 void School_bells::slotSendData_to_monitor(QWebSocket *web_socket)
 {
-    std::string message;
+    std::string message = "monitor_protocol_data,";
     fill_shift_in_sending_data(message);
     _spWeb_socket_server.get()->slotSend_message(web_socket, message.c_str());
 }

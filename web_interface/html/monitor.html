@@ -1,6 +1,8 @@
 <html lang="ru">
     <head>
         <title>Расписание звонков</title>
+		<script type="text/javascript" src="../js/shedule_classes.js"></script>
+		<script type="text/javascript" src="../js/websocket.js"></script>
     </head>
     <body>
 		<table id="schedule_bells">
@@ -12,159 +14,13 @@
 			</tr>
 		</table>
 		
-		
-		
-		<!--
-		---------------
-        <h1>Расписание звонков</h1>
-        <p>
-            Host: <input id="webSocketHost" type="text" value="localhost:80"/>
-        </p>
-        <p>
-            <button onClick="initWebSocket();">Connect</button>
-            <button id="disconnectButton" onClick="stopWebSocket();" disabled>Disconnect</button>
-            <button onClick="checkSocket();">State</button>
-        </p>
-        <p>
-            <textarea id="debugTextArea" style="width:400px;height:200px;" readonly></textarea>
-        </p>
-        <p>
-            <input type="text" id="inputNick" value="nickname" />
-            <input type="text" id="inputText" onkeydown="if(event.keyCode==13)sendMessage();"/>
-            <button id="sendButton" onClick="sendMessage();" disabled>Send</button>
-        </p>
-		-->
         <script type="text/javascript">
-            var websocket = null;
-			
+			protocol_type = "monitor_protocol";
 			initWebSocket();
-			<!-- addRow(); -->
 			
-            <!-- var debugTextArea = document.getElementById("debugTextArea"); -->
-            function debug(message) {
-				console.log(message);
-                <!-- debugTextArea.value += message + "\n"; -->
-                <!-- debugTextArea.scrollTop = debugTextArea.scrollHeight; -->
-            }
+
 			
-            function initWebSocket() {
-                try {
-                    if (typeof MozWebSocket == 'function')
-                        WebSocket = MozWebSocket;
-                    if ( websocket && websocket.readyState == 1 )
-                        websocket.close();
-                    var wsUri = "ws://localhost";
-                    websocket = new WebSocket( wsUri );
-                    websocket.onopen = function (evt) {
-                        debug("CONNECTED");
-                        <!-- document.getElementById("disconnectButton").disabled = false; -->
-                        <!-- document.getElementById("sendButton").disabled = false; -->
-                    };
-                    websocket.onclose = function (evt) {
-                        debug("DISCONNECTED");
-                        <!-- document.getElementById("disconnectButton").disabled = true; -->
-                        <!-- document.getElementById("sendButton").disabled = true; -->
-                    };
-                    websocket.onmessage = function (evt) {
-						let data = evt.data;
-						console.log("Received data: " + data);
-						<!-- let protocol = data.slice(0,data.indexOf(',')); -->
-						<!-- let raw_data = data.slice(data.indexOf(',')+1); -->
-						<!-- let array_data = data.split(','); -->
-						<!-- console.log( "Protocol: ", protocol); -->
-						<!-- console.log( "Raw data: ", raw_data); -->
-                        <!-- array_data.forEach(function(item, i, arr) -->
-						<!-- { -->
-							<!-- console.log(item + "\n"); -->
-						<!-- }); -->
-                        <!-- debug( evt.data ); -->
-						if(data == "protocol")
-						{
-							sendMessage();
-						}
-						
-                    };
-                    websocket.onerror = function (evt) {
-                        debug('ERROR: ' + evt.data);
-                    };
-					
-                } catch (exception) {
-                    debug('ERROR: ' + exception);
-                }
-            }
-			function sendMessage() 
-			{
-                if ( websocket != null )
-                {
-                    websocket.send( "monitor_protocol" );
-                    console.log( "Sent data: monitor_protocol" );
-                }
-            }
-
-            <!-- function stopWebSocket() { -->
-                <!-- if (websocket) -->
-                    <!-- websocket.close(); -->
-            <!-- } -->
-
-            <!-- function checkSocket() { -->
-                <!-- if (websocket != null) { -->
-                    <!-- var stateStr; -->
-                    <!-- switch (websocket.readyState) { -->
-                        <!-- case 0: { -->
-                            <!-- stateStr = "CONNECTING"; -->
-                            <!-- break; -->
-                        <!-- } -->
-                        <!-- case 1: { -->
-                            <!-- stateStr = "OPEN"; -->
-                            <!-- break; -->
-                        <!-- } -->
-                        <!-- case 2: { -->
-                            <!-- stateStr = "CLOSING"; -->
-                            <!-- break; -->
-                        <!-- } -->
-                        <!-- case 3: { -->
-                            <!-- stateStr = "CLOSED"; -->
-                            <!-- break; -->
-                        <!-- } -->
-                        <!-- default: { -->
-                            <!-- stateStr = "UNKNOW"; -->
-                            <!-- break; -->
-                        <!-- } -->
-                    <!-- } -->
-                    <!-- debug("WebSocket state = " + websocket.readyState + " ( " + stateStr + " )"); -->
-                <!-- } else { -->
-                    <!-- debug("WebSocket is null"); -->
-                <!-- } -->
-            <!-- } -->
-			function addRow()
-			{
-				// Считываем значения с формы
-				number = "0";
-				begin = "08:30";
-				end = "09:15";
-
-				// Находим нужную таблицу
-				var tbody = document.getElementById('schedule_bells').getElementsByTagName('TBODY')[0];
-
-				// Создаем строку таблицы и добавляем ее
-				var row = document.createElement("TR");
-				tbody.appendChild(row);
-
-				// Создаем ячейки в вышесозданной строке
-				// и добавляем тх
-				var td1 = document.createElement("TD");
-				var td2 = document.createElement("TD");
-				var td3 = document.createElement("TD");
-
-				row.appendChild(td1);
-				row.appendChild(td2);
-				row.appendChild(td3);
-
-				// Наполняем ячейки
-				td1.innerHTML = number;
-				td2.innerHTML = begin;
-				td3.innerHTML = end;
-			}
+			
         </script>
     </body>
 </html>
