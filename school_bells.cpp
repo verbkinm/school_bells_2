@@ -20,14 +20,14 @@ void School_bells::check_current_day()
 {
     Day current_day = _settings.days()->at(Day::current_day_of_week());
     if(current_day.isEnable())
-        _shedule = _settings.shedules()->at(current_day.getNumber_shedule_of_day());
+        _shedule_of_day = _settings.shedules()->at(current_day.getNumber_shedule_of_day());
 }
 
 void School_bells::fill_current_shedule()
 {
     _current_shedule.unwatch();
     _current_shedule.clear();
-    for(const auto &shift : _shedule._shifts)
+    for(const auto &shift : _shedule_of_day._shifts)
     {
         if(shift.isEnable())
             fill_shifts(shift);
@@ -60,16 +60,24 @@ void School_bells::create_day_shedule()
 
 void School_bells::fill_shift_in_sending_data(std::string &message) const
 {
-    for(size_t shift_number = 0; shift_number < _shedule._shifts.size(); ++shift_number)
+    for(size_t shift_number = 0; shift_number < _shedule_of_day._shifts.size(); ++shift_number)
     {
-        Shift shift = _shedule._shifts.at(shift_number);
+        const Shift &shift = _shedule_of_day._shifts.at(shift_number);
         if(!shift.isEnable())
             continue;
         message += std::to_string(shift_number);
         message += "," + std::to_string(shift.getStart_number_of_lesson());
+        //!
+        fill_lesson_state(message);
+
         fill_lesson_in_sending_data(shift, message);
         message += ";";
     }
+}
+
+void School_bells::fill_lesson_state(std::string &message) const
+{
+
 }
 
 void School_bells::fill_lesson_in_sending_data(const Shift &shift, std::string &message) const
@@ -81,11 +89,21 @@ void School_bells::fill_lesson_in_sending_data(const Shift &shift, std::string &
             message += "," + lesson.getTime_begin_str();
             message += "," + lesson.getTime_end_str();
         }
+        else
+        {
+            message += ", -- : --";
+            message += ", -- : --";
+        }
     }
 }
 
 void School_bells::slotNew_day()
 {
+    for( auto &shift :_shedule_of_day._shifts)
+    {
+//        shift.check_state_of_lesson();
+    }
+
     if(_current_day_of_week == Day::current_day_of_week())
         return;
 

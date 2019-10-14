@@ -12,6 +12,7 @@ SOURCES += \
         Settings/General/network.cpp \
         Settings/Shedule/lesson/lesson.cpp \
         Settings/Shedule/shedule.cpp \
+        Settings/Shedule/shift/lesson_time_state.cpp \
         Settings/Shedule/shift/shift.cpp \
         Settings/Shedule/time/time.cpp \
         Settings/settings.cpp \
@@ -29,12 +30,14 @@ HEADERS += \
     Settings/General/network.h \
     Settings/Shedule/lesson/lesson.h \
     Settings/Shedule/shedule.h \
+    Settings/Shedule/shift/lesson_time_state.h \
     Settings/Shedule/shift/shift.h \
     Settings/Shedule/time/time.h \
     Media_Player/media_player.h \
     Settings/settings.h \
     Log/log.h \
     Web_Socket_server/web_socket_server.h \
+    circular_vector.h \
     school_bells.h
 
 DISTFILES +=

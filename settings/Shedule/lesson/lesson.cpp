@@ -65,3 +65,10 @@ std::string Lesson::getTime_end_str() const
     return _time_end.toString();
 }
 
+bool Lesson::isTime_corresponds_to_lesson(const Time &time) const
+{
+    if((time >= _time_begin && time < _time_end) || (time <= _time_end && time > _time_begin))
+        return true;
+    return false;
+}
+

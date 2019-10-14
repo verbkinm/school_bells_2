@@ -17,9 +17,12 @@ public:
     void addLesson(const Lesson &lesson);
     void remove_lesson(int index);
 
-    std::vector<Lesson> _lessons;
     int getStart_number_of_lesson() const;
     void setStart_number_of_lesson(int start_number_of_lesson);
+
+    void check_state_of_lesson();
+
+    std::vector<Lesson> _lessons;
 
 private:
     bool _enable;

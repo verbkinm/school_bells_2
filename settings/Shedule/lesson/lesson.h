@@ -27,6 +27,8 @@ public:
     std::string getTime_begin_str() const;
     std::string getTime_end_str() const;
 
+    bool isTime_corresponds_to_lesson(const Time &time) const;
+
 private:
     bool enable;
 

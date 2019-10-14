@@ -93,6 +93,11 @@ bool operator==(const Time &lhs, const Time &rhs)
     return lhs.total_minutes() == rhs.total_minutes();
 }
 
+bool operator!=(const Time &lhs, const Time &rhs)
+{
+    return lhs.total_minutes() != rhs.total_minutes();
+}
+
 int Time::total_minutes() const
 {
     return _hours * 60 + _minutes;

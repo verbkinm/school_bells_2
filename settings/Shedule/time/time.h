@@ -25,6 +25,7 @@ public:
     friend bool operator<(const Time &lhs, const Time &rhs);
     friend bool operator>(const Time &lhs, const Time &rhs);
     friend bool operator==(const Time &lhs, const Time &rhs);
+    friend bool operator!=(const Time &lhs, const Time &rhs);
     friend bool operator<=(const Time &lhs, const Time &rhs);
     friend bool operator>=(const Time &lhs, const Time &rhs);
 
