@@ -25,7 +25,6 @@ private:
     void create_day_shedule();
 
     void fill_shift_in_sending_data(std::string &message) const;
-    void fill_lesson_state(std::string &message) const;
     void fill_lesson_in_sending_data(const Shift &shift, std::string &message) const;
 
     Settings _settings;

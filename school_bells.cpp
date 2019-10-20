@@ -67,17 +67,9 @@ void School_bells::fill_shift_in_sending_data(std::string &message) const
             continue;
         message += std::to_string(shift_number);
         message += "," + std::to_string(shift.getStart_number_of_lesson());
-        //!
-        fill_lesson_state(message);
-
         fill_lesson_in_sending_data(shift, message);
         message += ";";
     }
-}
-
-void School_bells::fill_lesson_state(std::string &message) const
-{
-
 }
 
 void School_bells::fill_lesson_in_sending_data(const Shift &shift, std::string &message) const
@@ -99,11 +91,6 @@ void School_bells::fill_lesson_in_sending_data(const Shift &shift, std::string &
 
 void School_bells::slotNew_day()
 {
-    for( auto &shift :_shedule_of_day._shifts)
-    {
-//        shift.check_state_of_lesson();
-    }
-
     if(_current_day_of_week == Day::current_day_of_week())
         return;
 

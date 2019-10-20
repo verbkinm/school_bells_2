@@ -25,6 +25,7 @@ function initWebSocket()
         websocket.onmessage = function (evt) 
 		{
 			let data = evt.data;
+			console.log("Received monitor data: " + data);
 			if(data == "protocol")
 			{
 				console.log("Protocol request from server");
@@ -32,7 +33,6 @@ function initWebSocket()
 			}
 			if(data.startsWith("monitor_protocol_data"))
 			{
-				console.log("Received monitor data: " + data);
 				fill_shedule(data);
 				// shedule.print();
 				addTables();

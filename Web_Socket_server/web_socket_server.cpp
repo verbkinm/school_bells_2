@@ -1,4 +1,5 @@
 #include "web_socket_server.h"
+#include "Log/log.h"
 
 #include <QWebSocket>
 
@@ -18,6 +19,7 @@ Web_socket_server::Web_socket_server(QHostAddress addr, quint16 port, QObject *p
 {
     if (m_pWebSocketServer->listen(addr, port))
     {
+        Log::write(QString("Server listening on address \"" + m_pWebSocketServer->serverUrl().toString()).toStdString());
         QTextStream(stdout) << "Server listening on address \"" << m_pWebSocketServer->serverUrl().toString() + "\n";
         connect(m_pWebSocketServer, &QWebSocketServer::newConnection, this, &Web_socket_server::onNewConnection);
     }
@@ -31,6 +33,7 @@ Web_socket_server::~Web_socket_server()
 void Web_socket_server::onNewConnection()
 {
     auto pSocket = m_pWebSocketServer->nextPendingConnection();
+    Log::write(QString(getIdentifier(pSocket) + " connected!").toStdString());
     QTextStream(stdout) << getIdentifier(pSocket) << " connected!\n";
     pSocket->setParent(this);
 
@@ -40,21 +43,11 @@ void Web_socket_server::onNewConnection()
     m_clients << pSocket;
 
     emit signalNew_connection(pSocket);
-
-//    QByteArray byte_array;
-//    byte_array.push_back("monitor_table");
-//    pSocket->sendTextMessage("monitor_table,0,8:30,9:45");
 }
 
 void Web_socket_server::slotSend_message(QWebSocket *web_socket, const QString &message)
 {
     web_socket->sendTextMessage(message);
-//    QWebSocket *pSender = qobject_cast<QWebSocket *>(sender());
-//    for (auto pClient : m_clients)
-//    {
-//        if (pClient != pSender) //don't echo message back to sender
-//            pClient->sendTextMessage(message);
-    //    }
 }
 
 void Web_socket_server::slotGet_message(const QString &message)
@@ -70,6 +63,7 @@ void Web_socket_server::slotGet_message(const QString &message)
 void Web_socket_server::socketDisconnected()
 {
     QWebSocket *pClient = qobject_cast<QWebSocket *>(sender());
+    Log::write(QString(getIdentifier(pClient) + " disconnected!").toStdString());
     QTextStream(stdout) << getIdentifier(pClient) << " disconnected!\n";
     if (pClient)
     {
