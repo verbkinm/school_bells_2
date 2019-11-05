@@ -9,11 +9,11 @@ SOURCES += \
         Current_Shedule\current_shedule.cpp \
         Settings/Day/day.cpp \
         Settings/General/general.cpp \
-        Settings/General/network.cpp \
-        Settings/Shedule/lesson/lesson.cpp \
+        Settings/Network/network.cpp \
+        Settings/Shedule/shift/lesson/lesson.cpp \
         Settings/Shedule/shedule.cpp \
         Settings/Shedule/shift/shift.cpp \
-        Settings/Shedule/time/time.cpp \
+        Settings/Shedule/shift/lesson/time/time.cpp \
         Settings/settings.cpp \
         Log/log.cpp \
         Web_Socket_server/web_socket_server.cpp \
@@ -26,12 +26,12 @@ HEADERS += \
     Current_Shedule\current_shedule.h \
     Settings/Day/day.h \
     Settings/General/general.h \
-    Settings/General/network.h \
-    Settings/Shedule/lesson/lesson.h \
+    Settings/Network/network.h \
+    Settings/Shedule/shift/lesson/lesson.h \
     Settings/Shedule/shedule.h \
     Settings/Shedule/shift/lesson_time_state.h \
     Settings/Shedule/shift/shift.h \
-    Settings/Shedule/time/time.h \
+    Settings/Shedule/shift/lesson/time/time.h \
     Media_Player/media_player.h \
     Settings/settings.h \
     Log/log.h \

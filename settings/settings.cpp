@@ -204,3 +204,13 @@ const std::vector<Shedule> *Settings::shedules() const
 {
     return &_shedules;
 }
+
+Shedule Settings::shedule_of_day() const
+{
+    Shedule shedule_of_day;
+    Day current_day = _days.at(Day::current_day_of_week());
+    if(current_day.isEnable())
+        shedule_of_day = _shedules.at(current_day.getNumber_shedule_of_day());
+
+    return shedule_of_day;
+}

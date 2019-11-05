@@ -2,17 +2,18 @@
 #define CURRENT_SHEDULE_H
 
 #include <map>
+#include <memory>
 #include <QTimer>
-#include "Settings/Shedule/time/time.h"
+#include "Settings/Shedule/shift/lesson/time/time.h"
 #include "Media_Player/media_player.h"
 #include "Program_exec/program_exec.h"
-#include "../Settings/General/general.h"
+#include "../Settings/settings.h"
 
 class Current_Shedule : QObject
 {
     Q_OBJECT
 public:
-    Current_Shedule(QObject *parent = nullptr);
+    Current_Shedule(std::shared_ptr<const Settings> settings, QObject *parent = nullptr);
 
     void add(const Time &time, const std::string &sound);
     void remove(const Time &time);
@@ -21,8 +22,6 @@ public:
     void printTable() const;
     void watch();
     void unwatch();
-
-    void setGeneral_settings(const General *general);
 
 private:
     void check_shedule_size() const;
@@ -34,7 +33,7 @@ private:
     QTimer _timer;
     Media_Player _player;
     Program_Exec _cmd;
-    General const *_general;
+    std::shared_ptr<Settings const> _spSettings;
 
 private slots:
     void slotTimer_out();

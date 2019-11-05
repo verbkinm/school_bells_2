@@ -2,7 +2,7 @@
 #define LESSON_H
 
 #include <string>
-#include "../time/time.h"
+#include "time/time.h"
 
 class Lesson
 {

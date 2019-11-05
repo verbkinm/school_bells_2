@@ -5,7 +5,7 @@
 #include "Day/day.h"
 #include "Shedule/shedule.h"
 #include "General/general.h"
-#include "General/network.h"
+#include "Network/network.h"
 
 class Settings
 {
@@ -19,6 +19,8 @@ public:
 
     const std::array<Day, 7> *days() const;
     const std::vector<Shedule> *shedules() const;
+
+    Shedule shedule_of_day() const;
 
 
 private:

@@ -3,7 +3,9 @@
 #include <QString>
 #include "current_shedule.h"
 
-Current_Shedule::Current_Shedule(QObject *parent) : QObject (parent), _general(nullptr)
+Current_Shedule::Current_Shedule(std::shared_ptr<const Settings> settings, QObject *parent) :
+    QObject (parent),
+    _spSettings(settings)
 {
     connect(&_timer, SIGNAL(timeout()), SLOT(slotTimer_out()));
 }
@@ -36,7 +38,7 @@ void Current_Shedule::setNext_call_according_local_time()
     _current_iterator = std::find_if(_call_table.begin(), _call_table.end(),
                                      [] (const std::pair<Time, std::string> pair)
                                      //                           { return pair.first >= Time(8,50)/*Time::fromLocal_time()*/;});
-    { return pair.first >= Time::fromLocal_time();});
+                                        { return pair.first >= Time::fromLocal_time();});
     circularity_of_iterator();
 }
 
@@ -50,17 +52,12 @@ void Current_Shedule::slotTimer_out()
 {
     if(Time::fromLocal_time() == _current_iterator->first)
     {
-        _cmd.exec(_general->getPrograms_before_bell());
+        _cmd.exec(_spSettings->general()->getPrograms_before_bell());
         this->_player.play(_current_iterator->second);
-        _cmd.exec(_general->getPrograms_after_bell());
+        _cmd.exec(_spSettings->general()->getPrograms_after_bell());
         _current_iterator++;
         circularity_of_iterator();
     }
-}
-
-void Current_Shedule::setGeneral_settings(const General *general)
-{
-    _general = general;
 }
 
 void Current_Shedule::clear()

@@ -1,7 +1,7 @@
 #ifndef SHIFT_H
 #define SHIFT_H
 
-#include "../lesson/lesson.h"
+#include "lesson/lesson.h"
 #include <vector>
 
 class Shift
