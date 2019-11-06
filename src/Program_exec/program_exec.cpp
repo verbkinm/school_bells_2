@@ -1,5 +1,5 @@
 #include <QVariant>
-#include "../Log/log.h"
+#include <log.h>
 #include "program_exec.h"
 
 Program_Exec::Program_Exec(QObject *parent) : QObject(parent)

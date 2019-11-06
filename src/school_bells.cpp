@@ -45,7 +45,7 @@ void School_bells::fill_shifts(const Shift &shift)
         if(lesson.isEnable())
         {
             if(_spSettings->general()->getCall_before_lesson())
-                _current_shedule.add(lesson.getTime_begin() - Time(0, _spSettings->general()->getNumber_of_minutes_to_call_before_lesson()), _spSettings->general()->getSound_before_lesson());
+                _current_shedule.add(lesson.getTime_begin() - Time_of_day(0, _spSettings->general()->getNumber_of_minutes_to_call_before_lesson()), _spSettings->general()->getSound_before_lesson());
             _current_shedule.add(lesson.getTime_begin(), lesson.getSound_begin());
             _current_shedule.add(lesson.getTime_end(), lesson.getSound_end());
         }

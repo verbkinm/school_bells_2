@@ -35,22 +35,22 @@ void Lesson::setSound_end(const std::string &value)
     sound_end = value;
 }
 
-Time Lesson::getTime_begin() const
+Time_of_day Lesson::getTime_begin() const
 {
     return _time_begin;
 }
 
-void Lesson::setTime_begin(const Time &time_begin)
+void Lesson::setTime_begin(const Time_of_day &time_begin)
 {
     _time_begin = time_begin;
 }
 
-Time Lesson::getTime_end() const
+Time_of_day Lesson::getTime_end() const
 {
     return _time_end;
 }
 
-void Lesson::setTime_end(const Time &time_end)
+void Lesson::setTime_end(const Time_of_day &time_end)
 {
     _time_end = time_end;
 }
@@ -65,7 +65,7 @@ std::string Lesson::getTime_end_str() const
     return _time_end.toString();
 }
 
-bool Lesson::isTime_corresponds_to_lesson(const Time &time) const
+bool Lesson::isTime_corresponds_to_lesson(const Time_of_day &time) const
 {
     if((time >= _time_begin && time < _time_end) || (time <= _time_end && time > _time_begin))
         return true;

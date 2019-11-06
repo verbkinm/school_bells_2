@@ -97,7 +97,7 @@ void Settings::read_settings_shedule_lesson(Shift &shift, int shift_number)
         lesson.setSound_begin(_settings.value("shift" + QString::number(shift_number) + "_lesson" + QString::number(lesson_number) + "_sound_begin", "нет").toString().toStdString());
         lesson.setSound_end(_settings.value("shift" + QString::number(shift_number) + "_lesson" + QString::number(lesson_number) + "_sound_end", "нет").toString().toStdString());
 
-        Time time(0,0);
+        Time_of_day time(0,0);
         time.setFrom_string(_settings.value("shift" + QString::number(shift_number) + "_lesson" + QString::number(lesson_number) + "_time_begin", "00:00").toString().toStdString());
         lesson.setTime_begin(time);
         time.setFrom_string(_settings.value("shift" + QString::number(shift_number) + "_lesson" + QString::number(lesson_number) + "_time_end", "00:00").toString().toStdString());

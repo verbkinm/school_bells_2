@@ -1,7 +1,7 @@
 #include <iostream>
 #include <QVariant>
 
-#include "../Log/log.h"
+#include <log.h>
 #include "media_player.h"
 
 Media_Player::Media_Player(QObject *parent) : QObject(parent)
@@ -22,7 +22,6 @@ Media_Player::~Media_Player()
 void Media_Player::play(const std::string &sound)
 {
     QMediaPlayer *player = new QMediaPlayer(this);
-    qDebug() << "parent";
     player->setProperty("sound", QVariant(sound.c_str()));
 
     connect(player, SIGNAL(error(QMediaPlayer::Error)), SLOT(slotError(QMediaPlayer::Error)));

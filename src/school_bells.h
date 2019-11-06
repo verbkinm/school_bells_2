@@ -7,7 +7,7 @@
 #include "Settings/General/general.h"
 #include "Current_Shedule/current_shedule.h"
 #include "Media_Player/media_player.h"
-#include "Log/log.h"
+#include <log.h>
 
 #include "Program_exec/program_exec.h"
 #include "Web_Socket_server/web_socket_server.h"

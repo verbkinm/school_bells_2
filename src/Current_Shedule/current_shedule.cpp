@@ -10,13 +10,13 @@ Current_Shedule::Current_Shedule(std::shared_ptr<const Settings> settings, QObje
     connect(&_timer, SIGNAL(timeout()), SLOT(slotTimer_out()));
 }
 
-void Current_Shedule::add(const Time &time, const std::string &sound)
+void Current_Shedule::add(const Time_of_day &time, const std::string &sound)
 {
     _call_table.insert({time, sound});
     setNext_call_according_local_time();
 }
 
-void Current_Shedule::remove(const Time &time)
+void Current_Shedule::remove(const Time_of_day &time)
 {
     _call_table.erase(time);
 }
@@ -36,9 +36,8 @@ void Current_Shedule::printTable() const
 void Current_Shedule::setNext_call_according_local_time()
 {
     _current_iterator = std::find_if(_call_table.begin(), _call_table.end(),
-                                     [] (const std::pair<Time, std::string> pair)
-                                     //                           { return pair.first >= Time(8,50)/*Time::fromLocal_time()*/;});
-                                        { return pair.first >= Time::fromLocal_time();});
+                                     [] (const std::pair<Time_of_day, std::string> pair)
+                                        { return pair.first >= Time_of_day::fromLocal_time();});
     circularity_of_iterator();
 }
 
@@ -50,7 +49,7 @@ void Current_Shedule::circularity_of_iterator()
 
 void Current_Shedule::slotTimer_out()
 {
-    if(Time::fromLocal_time() == _current_iterator->first)
+    if(Time_of_day::fromLocal_time() == _current_iterator->first)
     {
         _cmd.exec(_spSettings->general()->getPrograms_before_bell());
         this->_player.play(_current_iterator->second);

@@ -1,5 +1,5 @@
 #include "web_socket_server.h"
-#include "Log/log.h"
+#include <log.h>
 
 #include <QWebSocket>
 
@@ -13,15 +13,14 @@ Web_socket_server::Web_socket_server(std::shared_ptr<Settings> setting,
     _spWebSocketServer(std::make_unique<QWebSocketServer>("WSS Server", QWebSocketServer::NonSecureMode, this)),
     _spSettings(setting)
 {
-    _spWebSocketServer->listen(addr, port);
     if(_spWebSocketServer->listen(addr, port))
     {
         Log::write(QString("Server listening on address \"" + _spWebSocketServer->serverUrl().toString()).toStdString());
         QTextStream(stdout) << "Server listening on address \"" << _spWebSocketServer->serverUrl().toString() + "\n";
         connect(_spWebSocketServer.get(), &QWebSocketServer::newConnection, this, &Web_socket_server::slotNewConnection);
     }
-    else
-        Log::write(_spWebSocketServer->errorString().toStdString());
+//    else
+//        Log::write(_spWebSocketServer->errorString().toStdString());
 }
 
 Web_socket_server::~Web_socket_server()

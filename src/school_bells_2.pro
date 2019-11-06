@@ -13,9 +13,7 @@ SOURCES += \
         Settings/Shedule/shift/lesson/lesson.cpp \
         Settings/Shedule/shedule.cpp \
         Settings/Shedule/shift/shift.cpp \
-        Settings/Shedule/shift/lesson/time/time.cpp \
         Settings/settings.cpp \
-        Log/log.cpp \
         Web_Socket_server/web_socket_server.cpp \
         main.cpp \
         Media_Player/media_player.cpp \
@@ -29,13 +27,18 @@ HEADERS += \
     Settings/Network/network.h \
     Settings/Shedule/shift/lesson/lesson.h \
     Settings/Shedule/shedule.h \
-    Settings/Shedule/shift/lesson_time_state.h \
     Settings/Shedule/shift/shift.h \
-    Settings/Shedule/shift/lesson/time/time.h \
     Media_Player/media_player.h \
     Settings/settings.h \
-    Log/log.h \
     Web_Socket_server/web_socket_server.h \
     school_bells.h
 
 DISTFILES +=
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/lib/Time_of_day/ -lTime_of_day
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/lib/Log/ -lLog
+else:unix:!macx: LIBS += -L$$PWD/lib/Log/ -lLog
+else:unix:!macx: LIBS += -L$$PWD/lib/Time_of_day/ -lTime_of_day
+
+INCLUDEPATH += $$PWD/lib/include
+DEPENDPATH += $$PWD/lib/include
