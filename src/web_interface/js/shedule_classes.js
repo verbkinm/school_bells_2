@@ -177,7 +177,7 @@ function addTable(shift, shift_number)
 	
 	body.appendChild(table);
 	
-	addRow(table, "№ урока", "начало урока", "окончание урока");
+	addThead(table);
 	
 	shift.lesson_array.forEach(function(lesson, lesson_number) 	
 	{
@@ -211,6 +211,24 @@ function addTables()
 	
 	current_timer();
 	setInterval(current_timer, 1000);
+}
+
+function addThead(table)
+{
+	let row = document.createElement("THEAD");
+	table.appendChild(row);
+
+	let td1 = document.createElement("TD");
+	let td2 = document.createElement("TD");
+	let td3 = document.createElement("TD");
+
+	row.appendChild(td1);
+	row.appendChild(td2);
+	row.appendChild(td3);
+
+	td1.innerHTML = "№ <br>урока";
+	td2.innerHTML = "начало урока";
+	td3.innerHTML = "окончание урока";
 }
 
 function addRow(table, number, begin, end)

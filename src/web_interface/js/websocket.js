@@ -34,13 +34,17 @@ function initWebSocket()
 			if(data.startsWith("monitor_protocol_data"))
 			{
 				fill_shedule(data);
-				// shedule.print();
 				addTables();
 			}
 		};
         websocket.onerror = function (evt) 
 		{
 			console.log('ERROR: ' + evt.data);
+			let body = document.getElementById("body");
+			let h1 = document.createElement("H1");
+			h1.setAttribute("style", "color: red");	
+			body.appendChild(h1);
+			h1.innerHTML = "Сервер не доступен";
         };			
     }
 	catch (exception) 

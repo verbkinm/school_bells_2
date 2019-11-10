@@ -1,9 +1,28 @@
 table {
-    border-collapse: collapse; /*убираем пустые промежутки между ячейками*/
+    border-collapse: collapse; 
     margin: auto;
     width:600px;
+	font: 16px sans-serif;
+	margin-bottom: 25px;
 }
 table, td {
-    border: 1px solid grey; /*устанавливаем для таблицы внешнюю границу серого цвета толщиной 1px*/
+    border: 1px solid black;
     text-align: center;
+}
+caption{
+	font-size:28px;
+	margin-bottom:10px;
+}
+thead{
+	font-weight: bold;
+	background-color: #3366CC;
+}
+table tr:nth-child(even){ 
+	background-color: #EEE; 
+}
+tfoot{
+	font-size:18px;
+}
+#timer{
+	font-size:20px;
 }
