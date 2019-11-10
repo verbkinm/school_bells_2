@@ -24,10 +24,7 @@ public:
     Time_of_day getTime_end() const;
     void setTime_end(const Time_of_day &time_end);
 
-    std::string getTime_begin_str() const;
-    std::string getTime_end_str() const;
-
-    bool isTime_corresponds_to_lesson(const Time_of_day &time) const;
+//    bool isTime_corresponds_to_lesson(const Time_of_day &time) const;
 
 private:
     bool enable;

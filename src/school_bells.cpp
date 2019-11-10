@@ -3,7 +3,7 @@
 #define TIMER_INTERVAL 1000
 #define WRONG_DAY_OF_WEEK 100
 
-#define VERSION 0.13
+#define VERSION 0.14
 
 School_bells::School_bells(QObject *parent) : QObject (parent),
     _spSettings(std::make_shared<Settings>()),
@@ -69,7 +69,6 @@ void School_bells::slotNew_day()
 {
     if(_current_day_of_week == Day::current_day_of_week())
         return;
-
     create_day_shedule();
 }
 

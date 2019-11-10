@@ -5,7 +5,7 @@ Settings::Settings() : _settings(QSettings::IniFormat, QSettings::UserScope, "LY
     _settings.setIniCodec("utf8");
 
     read_settings();
-    write_settings();
+//    write_settings();
 }
 
 void Settings::read_settings()
@@ -175,8 +175,8 @@ void Settings::write_settings_shedule_lesson(size_t shedule_number, size_t shift
         _settings.setValue("shift" + QString::number(shift_number) + "_lesson" + QString::number(lesson_number) + "_enable", _shedules.at(shedule_number)._shifts.at(shift_number)._lessons.at(lesson_number).isEnable());
         _settings.setValue("shift" + QString::number(shift_number) + "_lesson" + QString::number(lesson_number) + "_sound_begin", QString::fromUtf8(_shedules.at(shedule_number)._shifts.at(shift_number)._lessons.at(lesson_number).getSound_begin().c_str()));
         _settings.setValue("shift" + QString::number(shift_number) + "_lesson" + QString::number(lesson_number) + "_sound_end", QString::fromUtf8(_shedules.at(shedule_number)._shifts.at(shift_number)._lessons.at(lesson_number).getSound_end().c_str()));
-        _settings.setValue("shift" + QString::number(shift_number) + "_lesson" + QString::number(lesson_number) + "_time_begin", QString::fromUtf8(_shedules.at(shedule_number)._shifts.at(shift_number)._lessons.at(lesson_number).getTime_begin_str().c_str()));
-        _settings.setValue("shift" + QString::number(shift_number) + "_lesson" + QString::number(lesson_number) + "_time_end", QString::fromUtf8(_shedules.at(shedule_number)._shifts.at(shift_number)._lessons.at(lesson_number).getTime_end_str().c_str()));
+        _settings.setValue("shift" + QString::number(shift_number) + "_lesson" + QString::number(lesson_number) + "_time_begin", QString::fromUtf8(_shedules.at(shedule_number)._shifts.at(shift_number)._lessons.at(lesson_number).getTime_begin().toString().c_str()));
+        _settings.setValue("shift" + QString::number(shift_number) + "_lesson" + QString::number(lesson_number) + "_time_end", QString::fromUtf8(_shedules.at(shedule_number)._shifts.at(shift_number)._lessons.at(lesson_number).getTime_end().toString().c_str()));
     }
 }
 

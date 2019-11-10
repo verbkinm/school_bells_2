@@ -1,0 +1,9 @@
+table {
+    border-collapse: collapse; /*убираем пустые промежутки между ячейками*/
+    margin: auto;
+    width:600px;
+}
+table, td {
+    border: 1px solid grey; /*устанавливаем для таблицы внешнюю границу серого цвета толщиной 1px*/
+    text-align: center;
+}

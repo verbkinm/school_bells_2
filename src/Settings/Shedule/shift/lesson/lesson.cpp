@@ -2,7 +2,6 @@
 
 Lesson::Lesson() : enable(false), sound_begin("NONE"), sound_end("NONE")
 {
-
 }
 
 bool Lesson::isEnable() const
@@ -55,20 +54,10 @@ void Lesson::setTime_end(const Time_of_day &time_end)
     _time_end = time_end;
 }
 
-std::string Lesson::getTime_begin_str() const
-{
-    return _time_begin.toString();
-}
-
-std::string Lesson::getTime_end_str() const
-{
-    return _time_end.toString();
-}
-
-bool Lesson::isTime_corresponds_to_lesson(const Time_of_day &time) const
-{
-    if((time >= _time_begin && time < _time_end) || (time <= _time_end && time > _time_begin))
-        return true;
-    return false;
-}
+//bool Lesson::isTime_corresponds_to_lesson(const Time_of_day &time) const
+//{
+//    if((time >= _time_begin && time < _time_end) || (time <= _time_end && time > _time_begin))
+//        return true;
+//    return false;
+//}
 

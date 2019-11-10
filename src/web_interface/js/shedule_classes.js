@@ -1,21 +1,16 @@
 class Lesson
 {
-	constructor(begin_time, end_time)
-	{
-		this.begin = begin_time;
-		this.end = end_time;
-		this.begin_in_minutes = Number(this.begin.split(":")[0]) * 60 + Number(this.begin.split(":")[1]) 
-		this.end_in_minutes = Number(this.end.split(":")[0]) * 60 + Number(this.end.split(":")[1])
-		
-		this.bH = Number(this.begin.split(":")[0]);
-		this.bM = Number(this.begin.split(":")[1]);
-		this.eH = Number(this.end.split(":")[0]);
-		this.eM = Number(this.end.split(":")[1]);
+    constructor(begin_time, end_time)
+    {
+        this.begin = begin_time;
+        this.end = end_time;
+        this.begin_in_minutes = Number(this.begin.split(":")[0]) * 60 + Number(this.begin.split(":")[1])
+        this.end_in_minutes = Number(this.end.split(":")[0]) * 60 + Number(this.end.split(":")[1])
 	}
 
 	print()
-	{
-		console.log(this.begin + "(" + this.minutes(this.begin_in_minutes) + ") - " + this.end + "(" + this.minutes(this.end_in_minutes) + ")");	
+    {
+        console.log(this.begin + "(" + this.minutes(this.begin_in_minutes) + ") - " + this.end + "(" + this.minutes(this.end_in_minutes) + ")");
 	}
 	
 	minutes(value)
@@ -29,9 +24,9 @@ class Lesson
 	time_in_lesson(time_in_minutes)
 	{
 		if( 
-			((time_in_minutes > this.begin_in_minutes || time_in_minutes == this.begin_in_minutes) && time_in_minutes < this.end_in_minutes) 
+            ((time_in_minutes > this.begin_in_minutes || time_in_minutes === this.begin_in_minutes) && time_in_minutes < this.end_in_minutes)
 			||
-			((time_in_minutes < this.end_in_minutes || time_in_minutes == this.end_in_minutes) && time_in_minutes > this.begin_in_minutes)
+            ((time_in_minutes < this.end_in_minutes || time_in_minutes === this.end_in_minutes) && time_in_minutes > this.begin_in_minutes)
 		)
 			return true;
 		else
@@ -64,7 +59,7 @@ class Shedule
 {
 	constructor()
 	{
-		this.shifts_array = new Array();	
+        this.shifts_array = [];
 	}
 
 	print()
@@ -139,7 +134,7 @@ function time_less(shift_number, shift, html_block)
 			//cell.setAttribute("id", "current_lesson");
 			found = true;
 		}
-		else if(lesson.begin_time != "-- : --" && current_time_in_minute < lesson.begin_in_minutes)
+        else if(lesson.begin !== "-- : --" && current_time_in_minute < lesson.begin_in_minutes)
 		{
 			let difference_in_second = lesson.begin_in_minutes * 60 - current_time_in_seconds;
 			let h = Math.floor(difference_in_second / 3600);
@@ -148,18 +143,26 @@ function time_less(shift_number, shift, html_block)
 			let result = twoDigit(h) + ":" + twoDigit(m) + ":" + twoDigit(s);
 			html_block.innerHTML = "До начала урока №" + Number(Number(lesson_number) + Number(shift.start_lesson)) + " осталось " + result;
 			found = true;
-		}
-		
-		if(!found)
-		{
-			let difference_in_second = 24 * 3600 + shift.lesson_array[0].begin_in_minutes * 60 - current_time_in_seconds;
-			let h = Math.floor(difference_in_second / 3600);
-			let m = Math.floor((difference_in_second - h*3600) / 60);
-			let s = difference_in_second - h * 3600 - m * 60;
-			let result = twoDigit(h) + ":" + twoDigit(m) + ":" + twoDigit(s);
-			html_block.innerHTML = "До начала урока №" + Number(Number(0) + Number(shift.start_lesson)) + " осталось " + result;
-		}
-	});
+        }
+    });
+
+    if(!found)
+    {
+        let first_enabled_lesson;
+
+        shift.lesson_array.forEach(function(lesson, lesson_number)
+        {
+            if(lesson.begin !== " -- : --")
+                first_enabled_lesson = lesson_number;
+        });
+
+        let difference_in_second = 24 * 3600 + shift.lesson_array[first_enabled_lesson].begin_in_minutes * 60 - current_time_in_seconds;
+        let h = Math.floor(difference_in_second / 3600);
+        let m = Math.floor((difference_in_second - h*3600) / 60);
+        let s = difference_in_second - h * 3600 - m * 60;
+        let result = twoDigit(h) + ":" + twoDigit(m) + ":" + twoDigit(s);
+        html_block.innerHTML = "До начала урока №" + Number(Number(first_enabled_lesson) + Number(shift.start_lesson)) + " осталось " + result;
+    }
 }
 function addTable(shift, shift_number)
 {
@@ -169,7 +172,8 @@ function addTable(shift, shift_number)
 	
 	let caption = document.createElement("caption");
 	table.appendChild(caption);
-	caption.innerHTML = "Смена №" + ++shift_number;
+    ++shift_number;
+    caption.innerHTML = "Смена №" + shift_number;
 	
 	body.appendChild(table);
 	
