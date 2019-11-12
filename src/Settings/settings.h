@@ -6,22 +6,20 @@
 #include "Shedule/shedule.h"
 #include "General/general.h"
 #include "Network/network.h"
+#include "../subject.h"
 
-class Settings
+class Settings : public Subject
 {
 public:
     Settings();
 
     const General *general() const;
-    void setGeneral(const General &general);
-
     const Network *network() const;
 
     const std::array<Day, 7> *days() const;
     const std::vector<Shedule> *shedules() const;
 
     Shedule shedule_of_day() const;
-
 
 private:
     void read_settings();

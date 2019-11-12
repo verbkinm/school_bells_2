@@ -17,7 +17,9 @@ SOURCES += \
         Web_Socket_server/web_socket_server.cpp \
         main.cpp \
         Media_Player/media_player.cpp \
-        school_bells.cpp
+        observer.cpp \
+        school_bells.cpp \
+        subject.cpp
 
 HEADERS += \
     Program_exec/program_exec.h \
@@ -31,7 +33,9 @@ HEADERS += \
     Media_Player/media_player.h \
     Settings/settings.h \
     Web_Socket_server/web_socket_server.h \
-    school_bells.h
+    observer.h \
+    school_bells.h \
+    subject.h
 
 DISTFILES +=
 

@@ -1,11 +1,12 @@
 #include "settings.h"
+#include <iostream>
 
 Settings::Settings() : _settings(QSettings::IniFormat, QSettings::UserScope, "LYCEUM", "bells2")
 {
     _settings.setIniCodec("utf8");
 
     read_settings();
-//    write_settings();
+    write_settings();
 }
 
 void Settings::read_settings()
@@ -114,6 +115,7 @@ void Settings::write_settings()
     write_settings_days();
     write_settings_shedule();
     _settings.sync();
+    notify();
 }
 
 void Settings::write_settings_general()
@@ -183,11 +185,6 @@ void Settings::write_settings_shedule_lesson(size_t shedule_number, size_t shift
 const General *Settings::general() const
 {
     return &_general;
-}
-
-void Settings::setGeneral(const General &general)
-{
-    _general = general;
 }
 
 const Network *Settings::network() const

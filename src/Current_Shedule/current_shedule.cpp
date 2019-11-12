@@ -3,22 +3,21 @@
 #include <QString>
 #include "current_shedule.h"
 
+#define TIMER_INTERVAL 1000
+
 Current_Shedule::Current_Shedule(std::shared_ptr<const Settings> settings, QObject *parent) :
     QObject (parent),
     _spSettings(settings)
 {
     connect(&_timer, SIGNAL(timeout()), SLOT(slotTimer_out()));
+    _timer.setInterval(TIMER_INTERVAL);
+    _timer.start();
 }
 
 void Current_Shedule::add(const Time_of_day &time, const std::string &sound)
 {
     _call_table.insert({time, sound});
     setNext_call_according_local_time();
-}
-
-void Current_Shedule::remove(const Time_of_day &time)
-{
-    _call_table.erase(time);
 }
 
 void Current_Shedule::printTable() const
@@ -47,6 +46,30 @@ void Current_Shedule::circularity_of_iterator()
         _current_iterator = _call_table.begin();
 }
 
+void Current_Shedule::fill_current_shedule()
+{
+    _call_table.clear();
+    for(const auto &shift : _spSettings->shedule_of_day()._shifts)
+    {
+        if(shift.isEnable())
+            fill_shifts(shift);
+    }
+}
+
+void Current_Shedule::fill_shifts(const Shift &shift)
+{
+    for (const auto &lesson : shift._lessons)
+    {
+        if(lesson.isEnable())
+        {
+            if(_spSettings->general()->getCall_before_lesson())
+                add(lesson.getTime_begin() - Time_of_day(0, _spSettings->general()->getNumber_of_minutes_to_call_before_lesson()), _spSettings->general()->getSound_before_lesson());
+            add(lesson.getTime_begin(), lesson.getSound_begin());
+            add(lesson.getTime_end(), lesson.getSound_end());
+        }
+    }
+}
+
 void Current_Shedule::slotTimer_out()
 {
     if(Time_of_day::fromLocal_time() == _current_iterator->first)
@@ -59,24 +82,10 @@ void Current_Shedule::slotTimer_out()
     }
 }
 
-void Current_Shedule::clear()
+void Current_Shedule::update()
 {
     _timer.stop();
-    _call_table.clear();
-}
-
-void Current_Shedule::watch()
-{
-    _timer.start(1000);
-}
-
-void Current_Shedule::unwatch()
-{
-    _timer.stop();
-}
-
-void Current_Shedule::check_shedule_size() const
-{
-    if(_call_table.size() == 0)
-        throw std::out_of_range("Call_table size is 0");
+    fill_current_shedule();
+    _timer.start();
+    printTable();
 }

@@ -1,7 +1,6 @@
 #ifndef SCHOOL_BELLS_H
 #define SCHOOL_BELLS_H
 
-#include <iostream>
 #include <memory>
 #include <Settings/settings.h>
 #include "Settings/General/general.h"
@@ -20,8 +19,6 @@ public:
     ~School_bells();
 
 private:
-    void fill_current_shedule();
-    void fill_shifts(const Shift &shift);
     void create_day_shedule();
 
     std::shared_ptr<Settings> _spSettings;
