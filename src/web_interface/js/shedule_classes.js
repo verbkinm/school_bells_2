@@ -152,16 +152,26 @@ function time_less(shift_number, shift, html_block)
 
         shift.lesson_array.forEach(function(lesson, lesson_number)
         {
-            if(lesson.begin !== " -- : --")
+            if(!found && lesson.begin !== " -- : --")
+			{
                 first_enabled_lesson = lesson_number;
+				found = true;
+			}
         });
 
-        let difference_in_second = 24 * 3600 + shift.lesson_array[first_enabled_lesson].begin_in_minutes * 60 - current_time_in_seconds;
-        let h = Math.floor(difference_in_second / 3600);
-        let m = Math.floor((difference_in_second - h*3600) / 60);
-        let s = difference_in_second - h * 3600 - m * 60;
-        let result = twoDigit(h) + ":" + twoDigit(m) + ":" + twoDigit(s);
-        html_block.innerHTML = "До начала урока №" + Number(Number(first_enabled_lesson) + Number(shift.start_lesson)) + " осталось " + result;
+		if(found)
+		{
+			let difference_in_second = 24 * 3600 + shift.lesson_array[first_enabled_lesson].begin_in_minutes * 60 - current_time_in_seconds;
+			let h = Math.floor(difference_in_second / 3600);
+			let m = Math.floor((difference_in_second - h*3600) / 60);
+			let s = difference_in_second - h * 3600 - m * 60;
+			let result = twoDigit(h) + ":" + twoDigit(m) + ":" + twoDigit(s);
+			html_block.innerHTML = "До начала урока №" + Number(Number(first_enabled_lesson) + Number(shift.start_lesson)) + " осталось " + result;
+		}
+		else
+		{
+			html_block.innerHTML = "Уроков нет =))";
+		}
     }
 }
 function addTable(shift, shift_number)

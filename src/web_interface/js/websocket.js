@@ -25,7 +25,7 @@ function initWebSocket()
         websocket.onmessage = function (evt) 
 		{
 			let data = evt.data;
-			console.log("Received monitor data: " + data);
+			console.log("Received data: " + data);
 			if(data == "protocol")
 			{
 				console.log("Protocol request from server");
@@ -35,6 +35,10 @@ function initWebSocket()
 			{
 				fill_shedule(data);
 				addTables();
+			}
+			if(data.startsWith("manager_protocol_authorization"))
+			{
+				
 			}
 		};
         websocket.onerror = function (evt) 

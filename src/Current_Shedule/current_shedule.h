@@ -13,7 +13,7 @@ class Current_Shedule : QObject, public Observer
 {
     Q_OBJECT
 public:
-    Current_Shedule(std::shared_ptr<const Settings> settings, QObject *parent = nullptr);
+    Current_Shedule(std::shared_ptr<Settings> settings, QObject *parent = nullptr);
 
     void update() override;
 

@@ -17,10 +17,18 @@ public:
     bool isEnable() const;
     void setEnable(bool value);
 
+    std::string getLogin();
+    void setLogin(const std::string &login);
+
+    std::string getPassword();
+    void setPassword(const std::string &password);
+
 private:
     std::string _addr;
     int _port;
     bool _enable;
+    std::string _login;
+    std::string _password;
 
 };
 

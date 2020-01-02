@@ -5,10 +5,12 @@
 
 #define TIMER_INTERVAL 1000
 
-Current_Shedule::Current_Shedule(std::shared_ptr<const Settings> settings, QObject *parent) :
+Current_Shedule::Current_Shedule(std::shared_ptr<Settings> settings, QObject *parent) :
     QObject (parent),
     _spSettings(settings)
 {
+    settings->attach(this);
+
     connect(&_timer, SIGNAL(timeout()), SLOT(slotTimer_out()));
     _timer.setInterval(TIMER_INTERVAL);
     _timer.start();
@@ -62,8 +64,8 @@ void Current_Shedule::fill_shifts(const Shift &shift)
     {
         if(lesson.isEnable())
         {
-            if(_spSettings->general()->getCall_before_lesson())
-                add(lesson.getTime_begin() - Time_of_day(0, _spSettings->general()->getNumber_of_minutes_to_call_before_lesson()), _spSettings->general()->getSound_before_lesson());
+            if(_spSettings->general().getCall_before_lesson())
+                add(lesson.getTime_begin() - Time_of_day(0, _spSettings->general().getNumber_of_minutes_to_call_before_lesson()), _spSettings->general().getSound_before_lesson());
             add(lesson.getTime_begin(), lesson.getSound_begin());
             add(lesson.getTime_end(), lesson.getSound_end());
         }
@@ -74,9 +76,9 @@ void Current_Shedule::slotTimer_out()
 {
     if(Time_of_day::fromLocal_time() == _current_iterator->first)
     {
-        _cmd.exec(_spSettings->general()->getPrograms_before_bell());
+        _cmd.exec(_spSettings->general().getPrograms_before_bell());
         this->_player.play(_current_iterator->second);
-        _cmd.exec(_spSettings->general()->getPrograms_after_bell());
+        _cmd.exec(_spSettings->general().getPrograms_after_bell());
         _current_iterator++;
         circularity_of_iterator();
     }

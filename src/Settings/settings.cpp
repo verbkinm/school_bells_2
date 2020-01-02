@@ -35,6 +35,8 @@ void Settings::read_settings_network()
     _network.setAddr(_settings.value("addr", "localhost").toString().toStdString());
     _network.setPort(_settings.value("port", 80).toInt());
     _network.setEnable(_settings.value("enable", false).toBool());
+    _network.setLogin(_settings.value("login", "admin").toString().toStdString());
+    _network.setPassword(_settings.value("password", "admin").toString().toStdString());
     _settings.endGroup();
 }
 
@@ -134,9 +136,11 @@ void Settings::write_settings_general()
 void Settings::write_settings_network()
 {
     _settings.beginGroup("TCP_Server");
-    _settings.setValue("addr", QString::fromUtf8(_network.getAddr().c_str()));
+    _settings.setValue("addr", _network.getAddr().c_str());
     _settings.setValue("port", _network.getPort());
     _settings.setValue("enable", _network.isEnable());
+    _settings.setValue("login", _network.getLogin().c_str());
+    _settings.setValue("password", _network.getPassword().c_str());
     _settings.endGroup();
 }
 
@@ -182,14 +186,14 @@ void Settings::write_settings_shedule_lesson(size_t shedule_number, size_t shift
     }
 }
 
-const General *Settings::general() const
+const General Settings::general() const
 {
-    return &_general;
+    return _general;
 }
 
-const Network *Settings::network() const
+const Network Settings::network() const
 {
-    return &_network;
+    return _network;
 }
 
 const std::array<Day, 7> *Settings::days() const

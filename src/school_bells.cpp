@@ -12,9 +12,8 @@ School_bells::School_bells(QObject *parent) : QObject (parent),
 {
     Log::write("Start program");
 
-    _spSettings->attach(&_current_shedule);
-    if(_spSettings->network()->isEnable())
-        _spWeb_socket_server = std::make_unique<Web_socket_server>(_spSettings, QHostAddress(_spSettings->network()->getAddr().c_str()), _spSettings->network()->getPort());
+    if(_spSettings->network().isEnable())
+        _spWeb_socket_server = std::make_unique<Web_socket_server>(_spSettings);
 
     connect(&_day_timer, SIGNAL(timeout()), SLOT(slotNew_day()));
     create_day_shedule();

@@ -12,13 +12,15 @@ class Web_socket_server : public QObject
 {
     Q_OBJECT
 public:
-    explicit Web_socket_server(std::shared_ptr<Settings> setting, QHostAddress addr = QHostAddress::Any, quint16 port = 80, QObject *parent = nullptr);
+    explicit Web_socket_server(std::shared_ptr<Settings> setting, QObject *parent = nullptr);
     ~Web_socket_server() override;
 
 public slots:
     void slotNewConnection();
     void slotGet_message(const QString &message);
     void socketDisconnected();
+
+    void authorizationRequest(QWebSocket *web_socket);
 
 private:
     void fill_shift_in_sending_data(std::string &message) const;

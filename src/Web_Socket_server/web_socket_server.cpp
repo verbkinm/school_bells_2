@@ -6,13 +6,14 @@
 #define MONITOR_PROTOCOL "monitor_protocol"
 #define MANAGER_PROTOCOL "manager_protocol"
 
-Web_socket_server::Web_socket_server(std::shared_ptr<Settings> setting,
-                                     QHostAddress addr, quint16 port,
-                                     QObject *parent) :
+Web_socket_server::Web_socket_server(std::shared_ptr<Settings> setting, QObject *parent) :
     QObject(parent),
     _spWebSocketServer(std::make_unique<QWebSocketServer>("WSS Server", QWebSocketServer::NonSecureMode, this)),
     _spSettings(setting)
 {
+    QHostAddress addr(_spSettings->network().getAddr().c_str());
+    quint16 port(static_cast<quint16>(_spSettings->network().getPort()));
+
     if(_spWebSocketServer->listen(addr, port))
     {
         Log::write(QString("Server listening on address \"" + _spWebSocketServer->serverUrl().toString()).toStdString());
@@ -54,7 +55,11 @@ void Web_socket_server::slotGet_message(const QString &message)
         sendData_to_monitor(pSocket);
     }
     else if(message == MANAGER_PROTOCOL)
-        ;
+    {
+        std::cout << pSocket->peerAddress().toString().toStdString() << ":" << pSocket->peerPort()
+                  << " Manager connected" << std::endl;
+        authorizationRequest(pSocket);
+    }
 }
 
 void Web_socket_server::socketDisconnected()
@@ -67,6 +72,11 @@ void Web_socket_server::socketDisconnected()
         m_clients.erase(pClient);
         pClient->deleteLater();
     }
+}
+
+void Web_socket_server::authorizationRequest(QWebSocket *web_socket)
+{
+    web_socket->sendTextMessage("manager_protocol_authorization");
 }
 
 void Web_socket_server::fill_shift_in_sending_data(std::string &message) const

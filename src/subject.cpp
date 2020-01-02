@@ -5,12 +5,12 @@ Subject::Subject()
 
 }
 
-void Subject::attach(Observer *observer)
+void Subject::attach(Observer  *observer)
 {
     _observers.push_back(observer);
 }
 
-void Subject::detache(Observer *observer)
+void Subject::detache(Observer  *observer)
 {
     _observers.remove(observer);
 }

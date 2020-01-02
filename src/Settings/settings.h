@@ -13,8 +13,8 @@ class Settings : public Subject
 public:
     Settings();
 
-    const General *general() const;
-    const Network *network() const;
+    const General general() const;
+    const Network network() const;
 
     const std::array<Day, 7> *days() const;
     const std::vector<Shedule> *shedules() const;
