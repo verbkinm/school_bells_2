@@ -35,7 +35,7 @@ void Network::setEnable(bool value)
     _enable = value;
 }
 
-std::string Network::getLogin()
+std::string Network::getLogin() const
 {
     return _login;
 }
@@ -45,7 +45,7 @@ void Network::setLogin(const std::string &login)
     _login = login;
 }
 
-std::string Network::getPassword()
+std::string Network::getPassword() const
 {
     return _password;
 }

@@ -14,6 +14,9 @@ SOURCES += \
         Settings/Shedule/shedule.cpp \
         Settings/Shedule/shift/shift.cpp \
         Settings/settings.cpp \
+        Web_Socket_server/abstract_protocol.cpp \
+        Web_Socket_server/manager_protocol.cpp \
+        Web_Socket_server/monitor_protocol.cpp \
         Web_Socket_server/web_socket_server.cpp \
         main.cpp \
         Media_Player/media_player.cpp \
@@ -32,6 +35,9 @@ HEADERS += \
     Settings/Shedule/shift/shift.h \
     Media_Player/media_player.h \
     Settings/settings.h \
+    Web_Socket_server/abstract_protocol.h \
+    Web_Socket_server/manager_protocol.h \
+    Web_Socket_server/monitor_protocol.h \
     Web_Socket_server/web_socket_server.h \
     observer.h \
     school_bells.h \

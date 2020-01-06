@@ -3,14 +3,14 @@
 #define TIMER_INTERVAL 1000
 #define WRONG_DAY_OF_WEEK 100
 
-#define VERSION 0.14.3
+#define VERSION "0.14.3.2"
 
 School_bells::School_bells(QObject *parent) : QObject (parent),
     _spSettings(std::make_shared<Settings>()),
     _current_shedule(_spSettings),
     _current_day_of_week(WRONG_DAY_OF_WEEK)
 {
-    Log::write("Start program");
+    Log::write(std::string("Start program " + std::string("version ") + std::string(VERSION)));
 
     if(_spSettings->network().isEnable())
         _spWeb_socket_server = std::make_unique<Web_socket_server>(_spSettings);

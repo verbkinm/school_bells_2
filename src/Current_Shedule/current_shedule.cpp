@@ -24,6 +24,12 @@ void Current_Shedule::add(const Time_of_day &time, const std::string &sound)
 
 void Current_Shedule::printTable() const
 {
+    if(_call_table.size() < 1)
+    {
+        std::cout << "No shedule!" << std::endl;
+        return;
+    }
+
     std::cout << "Shedule table:" << std::endl;
     int number = 0;
     for( const auto &[time, sound] : _call_table)

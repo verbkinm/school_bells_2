@@ -36,9 +36,9 @@ function initWebSocket()
 				fill_shedule(data);
 				addTables();
 			}
-			if(data.startsWith("manager_protocol_authorization"))
+			if(data.startsWith("manager_protocol_auth"))
 			{
-				
+				auth();
 			}
 		};
         websocket.onerror = function (evt) 
@@ -101,11 +101,5 @@ function sendProtocol_type(protocol_type)
                     <!-- console.log("WebSocket is null"); -->
                 <!-- } -->
             <!-- } -->
-			
-function reading_recieved_data()
-{
-	
-}	
-			
-			
+
 			

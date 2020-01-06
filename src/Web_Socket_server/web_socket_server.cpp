@@ -1,3 +1,5 @@
+#include "monitor_protocol.h"
+#include "manager_protocol.h"
 #include "web_socket_server.h"
 #include <log.h>
 
@@ -17,7 +19,7 @@ Web_socket_server::Web_socket_server(std::shared_ptr<Settings> setting, QObject 
     if(_spWebSocketServer->listen(addr, port))
     {
         Log::write(QString("Server listening on address \"" + _spWebSocketServer->serverUrl().toString()).toStdString());
-        QTextStream(stdout) << "Server listening on address \"" << _spWebSocketServer->serverUrl().toString() + "\"\n";
+        std::cout << "Server listening on address \"" << _spWebSocketServer->serverUrl().toString().toStdString() + "\"\n";
         connect(_spWebSocketServer.get(), &QWebSocketServer::newConnection, this, &Web_socket_server::slotNewConnection);
     }
     else
@@ -33,13 +35,13 @@ void Web_socket_server::slotNewConnection()
 {
     auto pSocket = _spWebSocketServer->nextPendingConnection();
     Log::write(QString(getIdentifier(pSocket) + " connected!").toStdString());
-    QTextStream(stdout) << getIdentifier(pSocket) << " connected!\n";
+    std::cout << getIdentifier(pSocket).toStdString() << " connected!\n";
     pSocket->setParent(this);
 
     connect(pSocket, &QWebSocket::textMessageReceived, this, &Web_socket_server::slotGet_message);
     connect(pSocket, &QWebSocket::disconnected, this, &Web_socket_server::socketDisconnected);
 
-    m_clients.insert(pSocket);
+    _clients.insert(pSocket);
 
     pSocket->sendTextMessage("protocol");
 }
@@ -48,17 +50,20 @@ void Web_socket_server::slotGet_message(const QString &message)
 {
     auto pSocket = qobject_cast<QWebSocket *>(sender());
 
-    if(message == MONITOR_PROTOCOL)
+    if(message.startsWith(MONITOR_PROTOCOL))
+        Monitor_Protocol monitorProtocol(pSocket, _spSettings, message.toStdString());
+    else if(message.startsWith(MANAGER_PROTOCOL))
     {
-        std::cout << pSocket->peerAddress().toString().toStdString() << ":" << pSocket->peerPort()
-                  << " Monitor connected" << std::endl;
-        sendData_to_monitor(pSocket);
-    }
-    else if(message == MANAGER_PROTOCOL)
-    {
-        std::cout << pSocket->peerAddress().toString().toStdString() << ":" << pSocket->peerPort()
-                  << " Manager connected" << std::endl;
-        authorizationRequest(pSocket);
+        Manager_Protocol managerProtocol(pSocket, _spSettings, message.toStdString());
+        _auth_session[pSocket] = managerProtocol.getSession_id();
+        std::cout << managerProtocol.getSession_id() << std::endl;
+
+        for(auto [key, value] :_auth_session)
+        {
+            std::cout << key->peerAddress().toString().toStdString()
+                      << ":" << QString::number(key->peerPort()).toStdString()
+                      << " session id= " << value << std::endl;
+        }
     }
 }
 
@@ -66,47 +71,12 @@ void Web_socket_server::socketDisconnected()
 {
     QWebSocket *pClient = qobject_cast<QWebSocket *>(sender());
     Log::write(QString(getIdentifier(pClient) + " disconnected!").toStdString());
-    QTextStream(stdout) << getIdentifier(pClient) << " disconnected!\n";
+    std::cout << getIdentifier(pClient).toStdString() << " disconnected!\n";
+    _auth_session.erase(pClient);
     if(pClient)
     {
-        m_clients.erase(pClient);
+        _clients.erase(pClient);
         pClient->deleteLater();
-    }
-}
-
-void Web_socket_server::authorizationRequest(QWebSocket *web_socket)
-{
-    web_socket->sendTextMessage("manager_protocol_authorization");
-}
-
-void Web_socket_server::fill_shift_in_sending_data(std::string &message) const
-{
-    for(size_t shift_number = 0; shift_number < _spSettings->shedule_of_day()._shifts.size(); ++shift_number)
-    {
-        const Shift shift = _spSettings->shedule_of_day()._shifts.at(shift_number);
-        if(!shift.isEnable())
-            continue;
-        message += std::to_string(shift_number);
-        message += "," + std::to_string(shift.getStart_number_of_lesson());
-        fill_lesson_in_sending_data(shift, message);
-        message += ";";
-    }
-}
-
-void Web_socket_server::fill_lesson_in_sending_data(const Shift &shift, std::string &message) const
-{
-    for(const Lesson &lesson : shift._lessons)
-    {
-        if(lesson.isEnable())
-        {
-            message += "," + lesson.getTime_begin().toString();
-            message += "," + lesson.getTime_end().toString();
-        }
-        else
-        {
-            message += ", -- : --";
-            message += ", -- : --";
-        }
     }
 }
 
@@ -114,11 +84,4 @@ QString Web_socket_server::getIdentifier(QWebSocket *peer)
 {
     return QStringLiteral("%1:%2").arg(peer->peerAddress().toString(),
                                        QString::number(peer->peerPort()));
-}
-
-void Web_socket_server::sendData_to_monitor(QWebSocket *web_socket)
-{
-    std::string message = "monitor_protocol_data,";
-    fill_shift_in_sending_data(message);
-    web_socket->sendTextMessage(message.c_str());
 }
