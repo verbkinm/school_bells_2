@@ -3,7 +3,7 @@
 #define TIMER_INTERVAL 1000
 #define WRONG_DAY_OF_WEEK 100
 
-#define VERSION "0.14.3.2"
+#define VERSION "0.14.3.3"
 
 School_bells::School_bells(QObject *parent) : QObject (parent),
     _spSettings(std::make_shared<Settings>()),

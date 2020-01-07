@@ -4,11 +4,13 @@
         <link rel="stylesheet" href="../css/style.css">
         <script type="text/javascript" src="../js/shedule_classes.js"></script>
         <script type="text/javascript" src="../js/websocket.js"></script>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
     </head>
     <body id="body">	
 		<div id="timer">
 		</div>
         <script type="text/javascript">
+			var shedule = new Shedule();
 			protocol_type = "monitor_protocol";
 			initWebSocket();
         </script>

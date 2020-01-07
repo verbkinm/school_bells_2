@@ -1,0 +1,13 @@
+#auth{
+	border: 2px solid black;
+	margin: auto;
+	width: 400px;
+}
+#login, #password, #button{
+	display:block;
+	margin: auto;
+}
+.error_msg{
+	text-align:center;
+	color: red;
+}

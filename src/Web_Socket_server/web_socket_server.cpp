@@ -58,12 +58,12 @@ void Web_socket_server::slotGet_message(const QString &message)
         _auth_session[pSocket] = managerProtocol.getSession_id();
         std::cout << managerProtocol.getSession_id() << std::endl;
 
-        for(auto [key, value] :_auth_session)
-        {
-            std::cout << key->peerAddress().toString().toStdString()
-                      << ":" << QString::number(key->peerPort()).toStdString()
-                      << " session id= " << value << std::endl;
-        }
+//        for(auto [key, value] :_auth_session)
+//        {
+//            std::cout << key->peerAddress().toString().toStdString()
+//                      << ":" << QString::number(key->peerPort()).toStdString()
+//                      << " session id= " << value << std::endl;
+//        }
     }
 }
 

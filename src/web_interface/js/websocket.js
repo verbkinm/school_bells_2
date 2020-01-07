@@ -2,7 +2,7 @@
 
 var websocket = null;
 var protocol_type = "NONE";			
-var shedule = new Shedule();
+var session_id = 0;
 	
 function initWebSocket() 
 {
@@ -25,7 +25,7 @@ function initWebSocket()
         websocket.onmessage = function (evt) 
 		{
 			let data = evt.data;
-			console.log("Received data: " + data);
+			// console.log("Received data: " + data);
 			if(data == "protocol")
 			{
 				console.log("Protocol request from server");
@@ -39,6 +39,21 @@ function initWebSocket()
 			if(data.startsWith("manager_protocol_auth"))
 			{
 				auth();
+			}
+			if(data.startsWith("manager_protocol_auth_error"))
+			{
+				error_auth();
+			}
+			if(data.startsWith("manager_protocol_session_id"))
+			{
+				session_id = data.split(":")[1];
+				// setCookie("session_id", session_id, 7);
+				// alert(document.cookie);
+				
+			}
+			if(data.startsWith("manager_protocol_data"))
+			{
+				main(data);
 			}
 		};
         websocket.onerror = function (evt) 
@@ -101,5 +116,26 @@ function sendProtocol_type(protocol_type)
                     <!-- console.log("WebSocket is null"); -->
                 <!-- } -->
             <!-- } -->
-
-			
+function setCookie(name,value,days) {
+    var expires = "";
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days*24*60*60*1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+}
+function getCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0;i < ca.length;i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    }
+    return null;
+}
+function eraseCookie(name) {   
+    document.cookie = name+'=; Max-Age=-99999999;';  
+}
+		
