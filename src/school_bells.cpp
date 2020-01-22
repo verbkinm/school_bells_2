@@ -3,7 +3,7 @@
 #define TIMER_INTERVAL 1000
 #define WRONG_DAY_OF_WEEK 100
 
-#define VERSION "0.14.3.3"
+#define VERSION "0.14.3.4"
 
 School_bells::School_bells(QObject *parent) : QObject (parent),
     _spSettings(std::make_shared<Settings>()),
@@ -24,7 +24,7 @@ School_bells::~School_bells()
     Log::write("Stop program");
 }
 
-void School_bells::create_day_shedule()
+void School_bells:: create_day_shedule()
 {
     _day_timer.stop();
     _current_shedule.update();

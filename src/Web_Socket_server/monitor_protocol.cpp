@@ -10,7 +10,6 @@ Monitor_Protocol::Monitor_Protocol(QWebSocket* pSocket,
                                    QObject *parent) : QObject(parent), Abstract_Protocol(pSocket, setting)
 {
     QString log_msg = pSocket->peerAddress().toString() + ":" + QString(pSocket->peerPort()) + " Monitor connected";
-    std::cout << log_msg.toStdString() << std::endl;
     Log::write(log_msg.toStdString());
 
     checkMessage(message);

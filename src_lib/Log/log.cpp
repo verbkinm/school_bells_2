@@ -22,6 +22,7 @@ void Log::write(const std::string &data)
     char out_str[80];
     strftime(out_str, 80, "%d/%m/%Y %X: ", timeinfo);
     file << out_str << data << std::endl;
+    std::cout << data << std::endl;
 
     file.close();
 }

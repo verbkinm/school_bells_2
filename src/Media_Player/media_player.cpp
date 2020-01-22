@@ -1,4 +1,3 @@
-#include <iostream>
 #include <QVariant>
 
 #include <log.h>

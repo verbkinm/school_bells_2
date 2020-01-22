@@ -19,8 +19,9 @@ Web_socket_server::Web_socket_server(std::shared_ptr<Settings> setting, QObject 
     if(_spWebSocketServer->listen(addr, port))
     {
         Log::write(QString("Server listening on address \"" + _spWebSocketServer->serverUrl().toString()).toStdString());
-        std::cout << "Server listening on address \"" << _spWebSocketServer->serverUrl().toString().toStdString() + "\"\n";
         connect(_spWebSocketServer.get(), &QWebSocketServer::newConnection, this, &Web_socket_server::slotNewConnection);
+        connect(_spWebSocketServer.get(), &QWebSocketServer::closed, this, &Web_socket_server::slotServerClose);
+        connect(_spWebSocketServer.get(), &QWebSocketServer::serverError, this, &Web_socket_server::slotServerClose);
     }
     else
         Log::write("Невозможно запустить WS сервер!");
@@ -28,6 +29,8 @@ Web_socket_server::Web_socket_server(std::shared_ptr<Settings> setting, QObject 
 
 Web_socket_server::~Web_socket_server()
 {
+    Log::write(QString("Server stop").toStdString());
+    std::cout << "Server stop\n";
     _spWebSocketServer->close();
 }
 
@@ -78,6 +81,16 @@ void Web_socket_server::socketDisconnected()
         _clients.erase(pClient);
         pClient->deleteLater();
     }
+}
+
+void Web_socket_server::slotServerClose()
+{
+    std::cout << "server stop\n";
+}
+
+void Web_socket_server::slotServerError(QWebSocketProtocol::CloseCode closeCode)
+{
+    qDebug() << closeCode;
 }
 
 QString Web_socket_server::getIdentifier(QWebSocket *peer)

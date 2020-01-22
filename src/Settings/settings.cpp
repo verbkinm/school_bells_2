@@ -1,5 +1,4 @@
 #include "settings.h"
-#include <iostream>
 
 Settings::Settings() : _settings(QSettings::IniFormat, QSettings::UserScope, "LYCEUM", "bells2")
 {

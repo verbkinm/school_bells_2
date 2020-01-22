@@ -1,4 +1,3 @@
-#include "iostream"
 #include <string_view>
 #include <string>
 
@@ -33,7 +32,6 @@ void Manager_Protocol::checkMessage(const std::string &message)
     QString msg(message.c_str());
     if(msg == "manager_protocol")
     {
-        std::cout << log_msg.toStdString() << std::endl;
         Log::write(log_msg.toStdString());
 
         _data = "manager_protocol_auth";
@@ -50,7 +48,6 @@ void Manager_Protocol::checkMessage(const std::string &message)
             if(_spSettings->network().getLogin() == login.toStdString() &&
                _spSettings->network().getPassword() == password.toStdString())
             {
-                std::cout << log_msg.toStdString() << ", Authorization successful" << std::endl;
                 Log::write(log_msg.toStdString() + std::string(", Authorization successful"));
                 _session_id = static_cast<uint64_t>(rand() * rand() -1);
                 _data = "manager_protocol_session_id:" + QString::number(_session_id).toStdString();
@@ -62,7 +59,6 @@ void Manager_Protocol::checkMessage(const std::string &message)
             {
                 _data = "manager_protocol_auth_error";
                 sendData(_pSocket);
-                std::cout << log_msg.toStdString() << ", Authorization failed" << std::endl;
                 Log::write(log_msg.toStdString() + std::string(", Authorization failed"));
             }
         }

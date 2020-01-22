@@ -1,6 +1,5 @@
-#include <algorithm>
 #include <iostream>
-#include <QString>
+
 #include "current_shedule.h"
 
 #define TIMER_INTERVAL 1000
@@ -80,6 +79,9 @@ void Current_Shedule::fill_shifts(const Shift &shift)
 
 void Current_Shedule::slotTimer_out()
 {
+    if(_call_table.empty())
+        return;
+
     if(Time_of_day::fromLocal_time() == _current_iterator->first)
     {
         _cmd.exec(_spSettings->general().getPrograms_before_bell());

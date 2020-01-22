@@ -12,13 +12,17 @@ class Web_socket_server : public QObject
 {
     Q_OBJECT
 public:
-    explicit Web_socket_server(std::shared_ptr<Settings> setting, QObject *parent = nullptr);
-    ~Web_socket_server() override;
+    Web_socket_server(std::shared_ptr<Settings> setting, QObject *parent = nullptr);
+    ~Web_socket_server();
 
 public slots:
     void slotNewConnection();
     void slotGet_message(const QString &message);
+
+private slots:
     void socketDisconnected();
+    void slotServerClose();
+    void slotServerError(QWebSocketProtocol::CloseCode closeCode);
 
 private:
     QString getIdentifier(QWebSocket *peer);
@@ -27,6 +31,7 @@ private:
     std::multiset<QWebSocket *> _clients;
     std::shared_ptr<Settings> _spSettings;
     std::map<QWebSocket *, uint64_t> _auth_session;
+
 };
 
 #endif //WEB_SOCKET_SERVER_H

@@ -46,9 +46,12 @@ HEADERS += \
 DISTFILES +=
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/lib/Time_of_day/ -lTime_of_day
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/lib/Log/ -lLog
-else:unix:!macx: LIBS += -L$$PWD/lib/Log/ -lLog
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/lib/Time_of_day/ -lTime_of_dayD
 else:unix:!macx: LIBS += -L$$PWD/lib/Time_of_day/ -lTime_of_day
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/lib/Log/ -lLog
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/lib/Log/ -lLogD
+else:unix:!macx: LIBS += -L$$PWD/lib/Log/ -lLog
 
 INCLUDEPATH += $$PWD/lib/include
 DEPENDPATH += $$PWD/lib/include
