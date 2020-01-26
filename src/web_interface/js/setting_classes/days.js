@@ -2,28 +2,28 @@ class Days
 {
 	constructor(string_data)
 	{
-		this.arr = string_data.split(",");
-		if(!check_server_data(this.arr, 3)) //3 параметров блока настроек days
+		let arr = string_data.split(",");
+		if(!check_server_data(arr, 3)) //3 параметров блока настроек days
 			return;
-		if(!this.arr[0].startsWith("Days"))
+		if(!arr[0].startsWith("Days"))
 		{
 			error_server_data();
 			return;
 		}
-		// console.log(this.arr);
-		for(let i = 1; i < this.arr.length; i++)
+		// console.log(arr);
+		for(let i = 1; i < arr.length; i++)
 		{
-			if(getArg(this.arr[i], 1) === false)
+			if(getArg(arr[i], 1) === false)
 				return;
 		}
 		
-		this.enable=getArg(this.arr[1], 1);
-		this.number_shedule_of_day=getArg(this.arr[2], 1);
+		this.enable=getArg(arr[1], 1);
+		this.number_shedule_of_day=getArg(arr[2], 1);
 	}
 	
 	debug()
 	{
-		console.log(this.enable);
-		console.log(this.number_shedule_of_day);
+		console.log("\tenable =", this.enable);
+		console.log("\tnumber_shedule_of_day =", this.number_shedule_of_day);
 	}
 }

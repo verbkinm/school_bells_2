@@ -125,7 +125,7 @@ std::string Manager_Protocol::shedules_to_str() const
     for(size_t shedule_number = 0; shedule_number < _spSettings->shedules()->size(); shedule_number++)
     {
         shedules += "Shedules,";
-        shedules += std::string("name") + SEPARATOR_SYMBOL + _spSettings->shedules()->at(shedule_number).name() + SEPARATOR_ARGS;
+        shedules += std::string("name") + SEPARATOR_SYMBOL + _spSettings->shedules()->at(shedule_number).name() + SEPARATOR_ARGS + "\n";
         shedules += shift_to_str(shedule_number);
         shedules += ";";
     }
@@ -140,7 +140,7 @@ std::string Manager_Protocol::shift_to_str(size_t shedule_number) const
     {
         shifts += "shift" + std::to_string(shift_number) + "_enable" + SEPARATOR_SYMBOL + bool_to_str(shift.isEnable()) + SEPARATOR_ARGS;
         shifts += "shift" + std::to_string(shift_number) + "_start_number_of_lesson" + SEPARATOR_SYMBOL + std::to_string(shift.getStart_number_of_lesson()) + SEPARATOR_ARGS;
-        shifts += lessons_tot_str(shift, shift_number);
+        shifts += lessons_tot_str(shift, shift_number) + "\n";
         shift_number++;
     }
     return shifts;
@@ -152,12 +152,11 @@ std::string Manager_Protocol::lessons_tot_str(const Shift &shift, size_t shift_n
     size_t lesson_number = 0;
     for(const auto &lesson : shift._lessons)
     {
-        lessons += "{shift" + std::to_string(shift_number) + "_lesson" + std::to_string(lesson_number) + "_enable" + SEPARATOR_SYMBOL + bool_to_str(lesson.isEnable()) + SEPARATOR_ARGS;
+        lessons += "shift" + std::to_string(shift_number) + "_lesson" + std::to_string(lesson_number) + "_enable" + SEPARATOR_SYMBOL + bool_to_str(lesson.isEnable()) + SEPARATOR_ARGS;
         lessons += "shift" + std::to_string(shift_number) + "_lesson" + std::to_string(lesson_number) + "_sound_begin" + SEPARATOR_SYMBOL + lesson.getSound_begin() + SEPARATOR_ARGS;
         lessons += "shift" + std::to_string(shift_number) + "_lesson" + std::to_string(lesson_number) + "_sound_end" + SEPARATOR_SYMBOL + lesson.getSound_end() + SEPARATOR_ARGS;
         lessons += "shift" + std::to_string(shift_number) + "_lesson" + std::to_string(lesson_number) + "_time_begin" + SEPARATOR_SYMBOL + lesson.getTime_begin().toString() + SEPARATOR_ARGS;
-        lessons += "shift" + std::to_string(shift_number) + "_lesson" + std::to_string(lesson_number) + "_time_end" + SEPARATOR_SYMBOL + lesson.getTime_end().toString();
-        lessons += "}";
+        lessons += "shift" + std::to_string(shift_number) + "_lesson" + std::to_string(lesson_number) + "_time_end" + SEPARATOR_SYMBOL + lesson.getTime_end().toString() + SEPARATOR_ARGS;
         lesson_number++;
     }
     return lessons;

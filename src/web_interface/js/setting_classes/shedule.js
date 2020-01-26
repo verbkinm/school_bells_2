@@ -2,30 +2,33 @@ class Shedule
 {
 	constructor(string_data)
 	{
-		this.arr = string_data.split(",");
-		if(!check_server_data(this.arr, 3)) 
+		let arr = string_data.split(",");
+		if(!check_server_data(arr, 3)) 
 			return;
-		if(!this.arr[0].startsWith("Shedule"))
+		if(!arr[0].startsWith("Shedules"))
 		{
 			error_server_data();
+			console.log("data=" + arr);
 			return;
 		}
-		// console.log(this.arr);
-		// for(let i = 1; i < this.arr.length; i++)
-		// {
-			// if(getArg(this.arr[i], 1) === false)
-				// return;
-		// }
-		this.name=getArg(this.arr[1], 1);
 		
+		this.name = getArg(arr[1], 1);
 		this.shifts = [];
-		for
-		string_data.substring(this.arr[0].length + this.arr[1].length + 2);
+		
+		let arr_n = string_data.split("\n");
+		for(let i = 1;  i < arr_n.length - 1 ; i++) 
+		{
+			this.shifts.push(new Shift(arr_n[i]));
+		}
 	}
 	
 	debug()
 	{
-		console.log(this.name);
-		console.log(this.shifts);
+		console.log("\tname =", this.name);
+		for(let i = 0;  i < this.shifts.length ; i++) 
+		{
+			console.log("\t\tSHIFT #", i, ":");
+			this.shifts[i].debug();
+		}
 	}
 }
