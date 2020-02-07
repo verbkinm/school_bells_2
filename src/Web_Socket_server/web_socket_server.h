@@ -25,12 +25,12 @@ private slots:
     void slotServerError(QWebSocketProtocol::CloseCode closeCode);
 
 private:
-    QString getIdentifier(QWebSocket *peer);
+    std::string getIdentifier(QWebSocket *peer) const;
 
     std::unique_ptr<QWebSocketServer> _spWebSocketServer;
-    std::multiset<QWebSocket *> _clients;
+    std::set<QWebSocket *> _clients;
     std::shared_ptr<Settings> _spSettings;
-    std::map<QWebSocket *, uint64_t> _auth_session;
+    std::set<uint64_t> _auth_session;
 
 };
 

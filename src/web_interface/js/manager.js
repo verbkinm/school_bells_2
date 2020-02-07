@@ -1,5 +1,9 @@
 function auth()
 {
+	session_id = get_cookie("id");
+	websocket.send("manager_protocol_session:" + session_id);
+	console.log("Send to server: " + "manager_protocol_session:" + session_id);
+	
 	let form = document.createElement("form");
 	form.setAttribute("id", "auth");
 
@@ -91,12 +95,18 @@ function getArg(data_string, arg_number)
 	return result;
 }
 
+function main_table()
+{
+	var lesson = new UI_Lesson();
+	lesson.number = 1;
+	lesson.show();
+	lesson.debug();
+}
+
 function main(data)
 {
-	console.log("session_id="+session_id);
-	data = data.substring(22); //manager_protocol_data: - 22
+	data = data.substring(data.indexOf(":") + 1); //manager_protocol_XXX:
 	let arr = data.split(";");
-	// console.log(arr);
 	if(!check_server_data(arr, 10)) //10 параметров минимальное значение для всех настроек
 		return;
 
@@ -104,23 +114,26 @@ function main(data)
 	clear(body);
 
 	var general = new General(arr[0]);
-	general.debug();
 	var tcp_server = new TCP_Server(arr[1]);
-	tcp_server.debug();
-	
+
+	if(debug)
+		console.log("Days:");	
 	var days = [];
-	console.log("Days:");
 	for(let i = 0; i < 7; i++) //7 - количество дней в седмице
 	{
+		if(debug)
+			console.log("\tday #", i);
 		days.push(new Days(arr[i+2]));
-		console.log("\tday #", i);
-		days[i].debug();
 	}
+	
 	var shedules = [];
-	console.log("Shedules:");
+	if(debug)
+		console.log("Shedules:");
 	for(let i = 9;  i < arr.length - 1 ; i++) // 9 = general + tcp_server + 7 дней
 	{
 		shedules.push(new Shedule(arr[i]));
-		shedules[shedules.length - 1].debug();
 	}
+	
+	main_table();
 }
+

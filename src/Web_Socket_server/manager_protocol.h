@@ -19,9 +19,12 @@ public:
                      QObject *parent = nullptr);
 
     uint64_t getSession_id() const;
+    bool getAuth() const;
+
+    void continueSession();
 
 private:
-    void sendData(QWebSocket *web_socket) override;
+    void sendData(QWebSocket *web_socket) const override;
     void checkMessage(const std::string &message) override;
     std::string allSettingsToString() const;
 
@@ -37,6 +40,7 @@ private:
 
     std::string _data;
     uint64_t _session_id;
+    bool _auth;
 };
 
 #endif // MANAGER_PROTOCOL_H

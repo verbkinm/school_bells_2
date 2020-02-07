@@ -15,12 +15,12 @@ void Network::setAddr(const std::string &value)
     _addr = value;
 }
 
-int Network::getPort() const
+uint16_t Network::getPort() const
 {
     return _port;
 }
 
-void Network::setPort(int value)
+void Network::setPort(uint16_t value)
 {
     _port = value;
 }

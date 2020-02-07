@@ -1,8 +1,13 @@
 <html lang="ru">
     <head>
-        <title>Расписание звонков</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+		
+        <title>Расписание звонков 0.1</title>
         <link rel="stylesheet" href="../css/style.css">
 		<link rel="stylesheet" href="../css/auth.css">
+		<link rel="stylesheet" href="../css/manager/lesson.css">
+		
+		<script type="text/javascript" src="../js/cookie.js"></script>
         <script type="text/javascript" src="../js/manager.js"></script>
 		<script type="text/javascript" src="../js/setting_classes/general.js"></script>
 		<script type="text/javascript" src="../js/setting_classes/tcp_server.js"></script>
@@ -11,12 +16,14 @@
 		<script type="text/javascript" src="../js/setting_classes/shift.js"></script>
 		<script type="text/javascript" src="../js/setting_classes/lesson.js"></script>
         <script type="text/javascript" src="../js/websocket.js"></script>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+		
+		<script type="text/javascript" src="../js/ui/ui_lesson.js"></script>
     </head>
     <body id="body">	
 		<div id="timer">
 		</div>
         <script type="text/javascript">
+			<!-- console.log( document.cookie ); -->
 			protocol_type = "manager_protocol";
 			initWebSocket();
         </script>

@@ -20,6 +20,9 @@ class TCP_Server
 		this.addr=getArg(arr[1], 1);
 		this.port=getArg(arr[2], 1);
 		this.enable=getArg(arr[3], 1);
+		
+		if(debug)
+			this.debug();
 	}
 	
 	debug()

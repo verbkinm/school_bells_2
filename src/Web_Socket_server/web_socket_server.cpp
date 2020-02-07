@@ -13,39 +13,33 @@ Web_socket_server::Web_socket_server(std::shared_ptr<Settings> setting, QObject 
     _spWebSocketServer(std::make_unique<QWebSocketServer>("WSS Server", QWebSocketServer::NonSecureMode, this)),
     _spSettings(setting)
 {
-    QHostAddress addr(_spSettings->network().getAddr().c_str());
-    quint16 port(static_cast<quint16>(_spSettings->network().getPort()));
-
-    if(_spWebSocketServer->listen(addr, port))
+    if(_spWebSocketServer->listen(QHostAddress(_spSettings->network().getAddr().c_str()), _spSettings->network().getPort()))
     {
-        Log::write(QString("Server listening on address \"" + _spWebSocketServer->serverUrl().toString()).toStdString());
+        Log::write("Server listening on address \"" + _spWebSocketServer->serverUrl().toString().toStdString());
         connect(_spWebSocketServer.get(), &QWebSocketServer::newConnection, this, &Web_socket_server::slotNewConnection);
         connect(_spWebSocketServer.get(), &QWebSocketServer::closed, this, &Web_socket_server::slotServerClose);
         connect(_spWebSocketServer.get(), &QWebSocketServer::serverError, this, &Web_socket_server::slotServerClose);
     }
     else
-        Log::write("Невозможно запустить WS сервер!");
+        Log::write("start WS server error!");
 }
 
 Web_socket_server::~Web_socket_server()
 {
-    Log::write(QString("Server stop").toStdString());
-    std::cout << "Server stop\n";
+    Log::write("Server stop");
     _spWebSocketServer->close();
 }
 
 void Web_socket_server::slotNewConnection()
 {
     auto pSocket = _spWebSocketServer->nextPendingConnection();
-    Log::write(QString(getIdentifier(pSocket) + " connected!").toStdString());
-    std::cout << getIdentifier(pSocket).toStdString() << " connected!\n";
+    Log::write(getIdentifier(pSocket) + " connected!");
     pSocket->setParent(this);
 
     connect(pSocket, &QWebSocket::textMessageReceived, this, &Web_socket_server::slotGet_message);
     connect(pSocket, &QWebSocket::disconnected, this, &Web_socket_server::socketDisconnected);
 
     _clients.insert(pSocket);
-
     pSocket->sendTextMessage("protocol");
 }
 
@@ -58,24 +52,19 @@ void Web_socket_server::slotGet_message(const QString &message)
     else if(message.startsWith(MANAGER_PROTOCOL))
     {
         Manager_Protocol managerProtocol(pSocket, _spSettings, message.toStdString());
-        _auth_session[pSocket] = managerProtocol.getSession_id();
-        std::cout << managerProtocol.getSession_id() << std::endl;
+        for(const auto value : _auth_session)
+            if(value == managerProtocol.getSession_id())
+                managerProtocol.continueSession();
 
-//        for(auto [key, value] :_auth_session)
-//        {
-//            std::cout << key->peerAddress().toString().toStdString()
-//                      << ":" << QString::number(key->peerPort()).toStdString()
-//                      << " session id= " << value << std::endl;
-//        }
+        if(managerProtocol.getAuth())
+            _auth_session.insert(managerProtocol.getSession_id());
     }
 }
 
 void Web_socket_server::socketDisconnected()
 {
     QWebSocket *pClient = qobject_cast<QWebSocket *>(sender());
-    Log::write(QString(getIdentifier(pClient) + " disconnected!").toStdString());
-    std::cout << getIdentifier(pClient).toStdString() << " disconnected!\n";
-    _auth_session.erase(pClient);
+    Log::write(getIdentifier(pClient) + " disconnected!");
     if(pClient)
     {
         _clients.erase(pClient);
@@ -85,16 +74,15 @@ void Web_socket_server::socketDisconnected()
 
 void Web_socket_server::slotServerClose()
 {
-    std::cout << "server stop\n";
+    Log::write("Server stop");
 }
 
 void Web_socket_server::slotServerError(QWebSocketProtocol::CloseCode closeCode)
 {
-    qDebug() << closeCode;
+    std::cout << closeCode << "\n";
 }
 
-QString Web_socket_server::getIdentifier(QWebSocket *peer)
+std::string Web_socket_server::getIdentifier(QWebSocket *peer) const
 {
-    return QStringLiteral("%1:%2").arg(peer->peerAddress().toString(),
-                                       QString::number(peer->peerPort()));
+    return peer->peerAddress().toString().toStdString() + ":" + std::to_string(peer->peerPort());
 }

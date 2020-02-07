@@ -24,6 +24,9 @@ class General
 		this.number_of_minutes_to_call_before_lesson=getArg(arr[5], 1);
 		this.programs_before_bell=getArg(arr[6], 1);
 		this.programs_after_bell=getArg(arr[7], 1);
+		
+		if(debug)
+			this.debug();
 	}
 	
 	debug()

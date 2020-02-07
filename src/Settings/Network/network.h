@@ -11,8 +11,8 @@ public:
     std::string getAddr() const;
     void setAddr(const std::string &value);
 
-    int getPort() const;
-    void setPort(int value);
+    uint16_t getPort() const;
+    void setPort(uint16_t value);
 
     bool isEnable() const;
     void setEnable(bool value);
@@ -25,7 +25,7 @@ public:
 
 private:
     std::string _addr;
-    int _port;
+    uint16_t _port;
     bool _enable;
     std::string _login;
     std::string _password;

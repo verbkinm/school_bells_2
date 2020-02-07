@@ -9,9 +9,7 @@ Monitor_Protocol::Monitor_Protocol(QWebSocket* pSocket,
                                    const std::string &message,
                                    QObject *parent) : QObject(parent), Abstract_Protocol(pSocket, setting)
 {
-    QString log_msg = pSocket->peerAddress().toString() + ":" + QString(pSocket->peerPort()) + " Monitor connected";
-    Log::write(log_msg.toStdString());
-
+    Log::write(pSocket->peerAddress().toString().toStdString() + ":" + std::to_string(pSocket->peerPort()) + " Monitor connected");
     checkMessage(message);
 }
 
@@ -20,12 +18,13 @@ void Monitor_Protocol::fill_shift_in_sending_data(std::string &message) const
     for(size_t shift_number = 0; shift_number < _spSettings->shedule_of_day()._shifts.size(); ++shift_number)
     {
         const Shift shift = _spSettings->shedule_of_day()._shifts.at(shift_number);
-        if(!shift.isEnable())
-            continue;
-        message += std::to_string(shift_number);
-        message += "," + std::to_string(shift.getStart_number_of_lesson());
-        fill_lesson_in_sending_data(shift, message);
-        message += ";";
+        if(shift.isEnable())
+        {
+            message += std::to_string(shift_number);
+            message += "," + std::to_string(shift.getStart_number_of_lesson());
+            fill_lesson_in_sending_data(shift, message);
+            message += ";";
+        }
     }
 }
 
@@ -46,7 +45,7 @@ void Monitor_Protocol::fill_lesson_in_sending_data(const Shift &shift, std::stri
     }
 }
 
-void Monitor_Protocol::sendData(QWebSocket *web_socket)
+void Monitor_Protocol::sendData(QWebSocket *web_socket) const
 {
     std::string message = "monitor_protocol_data,";
     fill_shift_in_sending_data(message);

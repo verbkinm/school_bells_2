@@ -3,6 +3,7 @@
 var websocket = null;
 var protocol_type = "NONE";			
 var session_id = 0;
+var debug = false;
 	
 function initWebSocket() 
 {
@@ -12,7 +13,7 @@ function initWebSocket()
 			WebSocket = MozWebSocket;
         if ( websocket && websocket.readyState == 1 )
 				websocket.close();
-        var wsUri = "ws://localhost";
+        var wsUri = "ws://localhost:81";
         websocket = new WebSocket( wsUri );
         websocket.onopen = function (evt) 
 		{
@@ -25,34 +26,39 @@ function initWebSocket()
         websocket.onmessage = function (evt) 
 		{
 			let data = evt.data;
-			// console.log("Received data: " + data);
+			console.log("Received data: " + data);
 			if(data == "protocol")
 			{
 				console.log("Protocol request from server");
 				sendProtocol_type(protocol_type);
 			}
-			if(data.startsWith("monitor_protocol_data"))
+			else if(data.startsWith("monitor_protocol_data"))
 			{
 				fill_shedule(data);
 				addTables();
 			}
-			if(data.startsWith("manager_protocol_auth"))
+			else if(data.startsWith("manager_protocol_auth"))
 			{
 				auth();
 			}
-			if(data.startsWith("manager_protocol_auth_error"))
+			else if(data.startsWith("manager_protocol_auth_error"))
 			{
 				error_auth();
 			}
-			if(data.startsWith("manager_protocol_session_id"))
+			else if(data.startsWith("manager_protocol_session_id"))
 			{
-				session_id = data.split(":")[1];
-				// setCookie("session_id", session_id, 7);
-				// alert(document.cookie);
-				
+				session_id = data.split(":")[1];				
 			}
-			if(data.startsWith("manager_protocol_data"))
+			else if(data.startsWith("manager_protocol_data"))
 			{
+				let date = new Date();
+				console.log("set cookie - id=" + session_id);
+				set_cookie("id", session_id, date.getFullYear(), date.getMonth(), date.getDate() + 1, "/");
+				main(data);	
+			}
+			else if(data.startsWith("manager_protocol_session_continue"))
+			{
+				console.log("session");
 				main(data);
 			}
 		};

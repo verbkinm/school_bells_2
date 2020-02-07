@@ -6,7 +6,6 @@
 
 #include <memory>
 #include <QWebSocket>
-#include <QWebSocketServer>
 
 #include <QObject>
 
@@ -22,7 +21,7 @@ private:
     void fill_shift_in_sending_data(std::string &message) const;
     void fill_lesson_in_sending_data(const Shift &shift, std::string &message) const;
 
-    void sendData(QWebSocket *web_socket) override;
+    void sendData(QWebSocket *web_socket) const override;
     void checkMessage(const std::string &message) override;
 };
 

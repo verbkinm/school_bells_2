@@ -20,6 +20,9 @@ class Shedule
 		{
 			this.shifts.push(new Shift(arr_n[i]));
 		}
+		
+		if(debug)
+			this.debug();
 	}
 	
 	debug()

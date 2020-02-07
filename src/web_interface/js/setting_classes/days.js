@@ -19,6 +19,9 @@ class Days
 		
 		this.enable=getArg(arr[1], 1);
 		this.number_shedule_of_day=getArg(arr[2], 1);
+		
+		if(debug)
+			this.debug();
 	}
 	
 	debug()
